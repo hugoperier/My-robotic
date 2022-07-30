@@ -25,6 +25,11 @@ class Buzzer():
         else:
             self.on()
 
+    def beep(self):
+        self.tonal.play(Tone("C4"))
+        sleep(0.5)
+        self.tonal.stop()
+
     def play(self, note, duration):
         self.tonal.play(Tone(note))
         sleep(duration)

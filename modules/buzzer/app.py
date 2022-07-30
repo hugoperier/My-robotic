@@ -135,11 +135,12 @@ russian_anthem = [
   {'note': "F4" ,'time': 1664}
 ]
 
-buzzer = Buzzer(23)
+if __name__ == 'main':
+  buzzer = Buzzer(23)
 
-for i in russian_anthem:
-    print(i["note"])
-    try:
-        buzzer.play(i["note"], i['time'] / 1000)
-    except Exception:
-        print(i["note"] + " not working")
+  for i in russian_anthem:
+      print(i["note"])
+      try:
+          buzzer.play(i["note"], i['time'] / 1000)
+      except Exception:
+          print(i["note"] + " not working")
