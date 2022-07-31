@@ -23,47 +23,46 @@ class OsoyooMotor:
         self.ENB = 1  #Right motor speed PCA9685 port 1
 
         # Define motor control  pins as output
-        GPIO.setup(self.IN1, GPIO.OUT)   
+        GPIO.setup(self.IN1, GPIO.OUT)
         GPIO.setup(self.IN2, GPIO.OUT) 
-        GPIO.setup(self.IN3, GPIO.OUT)   
-        GPIO.setup(self.IN4, GPIO.OUT) 
+        GPIO.setup(self.IN3, GPIO.OUT) 
+        GPIO.setup(self.IN4, GPIO.OUT)
 
     def changespeed(self, speed):
-	    self.pwm.set_pwm(self.ENA, 0, speed)
-	    self.pwm.set_pwm(self.ENB, 0, speed)
+        self.pwm.set_pwm(self.ENA, 0, speed)
+        self.pwm.set_pwm(self.ENB, 0, speed)
 
     def stopcar(self):
-	    GPIO.output(self.IN1, GPIO.LOW)
+        GPIO.output(self.IN1, GPIO.LOW)
         GPIO.output(self.IN2, GPIO.LOW)
-	    GPIO.output(self.IN3, GPIO.LOW)
-	    GPIO.output(self.IN4, GPIO.LOW)
-	    self.changespeed(0)
-
+        GPIO.output(self.IN3, GPIO.LOW)
+        GPIO.output(self.IN4, GPIO.LOW)
+        self.changespeed(0)
 
     def backward(self):
-	    GPIO.output(self.IN1, GPIO.HIGH)
-	    GPIO.output(self.IN2, GPIO.LOW)
-	    GPIO.output(self.IN3, GPIO.HIGH)
-	    GPIO.output(self.IN4, GPIO.LOW)
-	    self.changespeed(self.speed)
- 
+        GPIO.output(self.IN1, GPIO.HIGH)
+        GPIO.output(self.IN2, GPIO.LOW)
+        GPIO.output(self.IN3, GPIO.HIGH)
+        GPIO.output(self.IN4, GPIO.LOW)
+        self.changespeed(self.speed)
+
     def forward(self):
         GPIO.output(self.IN2, GPIO.HIGH)
         GPIO.output(self.IN1, GPIO.LOW)
         GPIO.output(self.IN4, GPIO.HIGH)
         GPIO.output(self.IN3, GPIO.LOW)
         self.changespeed(self.speed)
-	
+
     def turnRight(self):
         GPIO.output(self.IN1, GPIO.LOW)
         GPIO.output(self.IN2, GPIO.HIGH)
         GPIO.output(self.IN3, GPIO.HIGH)
         GPIO.output(self.IN4, GPIO.LOW)
         self.changespeed(self.speed)
-        
+    
     def turnLeft(self):
-        GPIO.output(self.IN1, GPIO.HIGH)
-        GPIO.output(self.IN2, GPIO.LOW)
-        GPIO.output(self.IN3, GPIO.LOW)
+        GPIO.output(self.IN2, GPIO.HIGH)
+        GPIO.output(self.IN1, GPIO.LOW)
         GPIO.output(self.IN4, GPIO.HIGH)
-        self.changespeed(self.speed)	
+        GPIO.output(self.IN3, GPIO.LOW)
+        self.changespeed(self.speed)
