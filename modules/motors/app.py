@@ -2,23 +2,16 @@ from OsoyooMotor import OsoyooMotor
 import time 
 
 motors = OsoyooMotor()
+print("move forward")
 motors.forward()
 time.sleep(2)  
-
-motors.stopcar()
+print("stop")
+motors.stop()
 time.sleep(2.25)
 
+print("move backward")
 motors.backward()
-time.sleep(2)  
-motors.stopcar()
+time.sleep(2)
+print("stop")  
+motors.stop()
 time.sleep(2.25) 
-
-motors.turnLeft()
-time.sleep(2)  
-motors.stopcar()
-time.sleep(2.25)
-	
-motors.turnRight()
-time.sleep(5)  
-motors.stopcar()
-time.sleep(2.25)
