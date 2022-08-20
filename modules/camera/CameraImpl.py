@@ -73,9 +73,13 @@ class CameraImpl:
         if self.__server_on__:
             self.__server_on__ = False
             self.stop_stream()
+            print("self.__server__.socket.close()")
             self.__server__.socket.close()
+            print("self.__server__.server_close()")
             self.__server__.server_close()
+            print("self.__server__.shutdown()")
             self.__server__.shutdown()
+            print("self.__server_thread__.join()")
             self.__server_thread__.join()
             print('Server stopped')
 
