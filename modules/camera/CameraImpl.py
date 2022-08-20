@@ -7,7 +7,7 @@ class CameraImpl:
         self.max_width = config['max_width']
         self.max_height = config['max_height']
         self.fps = config['fps']
-        self.fpsCounter = FpsCounter()
+        self.fpsCounter = FpsCounter(self.fps)
         self.width = config['width']
         self.height = config['height']
         self.capture.set(cv2.CAP_PROP_SATURATION, config['saturation'])
