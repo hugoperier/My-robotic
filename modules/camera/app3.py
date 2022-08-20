@@ -19,7 +19,7 @@ sleep(5)
 print(camera.fps)
 
 sleep(2)
-camera.fps = 10
+camera.fps = 2
 
 sleep(5)
 print(camera.fps)
@@ -27,6 +27,7 @@ print(camera.fps)
 sleep(2)
 camera.width = 480
 camera.height = 360
+camera.fps = 2
 
 sleep(10)
 
