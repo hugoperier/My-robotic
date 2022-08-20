@@ -1,25 +1,27 @@
 import time
+import collections
 
 class FpsCounter:
     def __init__(self, defined_fps):
         self.fps = 0
-        self.lastTime = time.time()
-        self.frames = 0
         self.defined_fps = defined_fps
+        self.frametimestamps = collections.deque(maxlen=50)
+        self.frametimestamps.append(time.time())
 
     def wait(self):
-        if self.fps > self.defined_fps:
-            time.sleep(1 / self.defined_fps - (time.time() - self.lastTime))
+        ellasped = (time.time() - self.frametimestamps[-1])
+        freq = 1 / self.defined_fps
+        if ellasped < freq:
+            time.sleep(freq - ellasped)
     
     def reset(self):
         self.fps = 0
-        self.lastTime = time.time()
-        self.frames = 0
+        self.frametimestamps = collections.deque(maxlen=50)
+        self.frametimestamps.append(time.time())
 
     def update(self):
-        self.frames += 1
-        if time.time() - self.lastTime >= 1:
-            self.fps = self.frames
-            self.frames = 0
-            self.lastTime = time.time()
-        return self.fps
+        self.frametimestamps.append(time.time())
+        if(len(self.frametimestamps) > 1):
+            self.fps = int(len(self.frametimestamps)/(self.frametimestamps[-1]-self.frametimestamps[0]))
+        else:
+            self.fps = 0
