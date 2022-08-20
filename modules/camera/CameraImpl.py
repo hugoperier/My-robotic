@@ -1,12 +1,14 @@
 import cv2
 from FpsCounter import FpsCounter
+from threading import Thread
+from HTTPVideoStreamHandler import HTTPVideoStreamHandler, ThreadedHTTPServer
 
 class CameraImpl:
     def __init__(self, config):
+        self.__server_on__ = False
         self.capture = cv2.VideoCapture(config['device'], cv2.CAP_V4L)
         self.max_width = config['max_width']
         self.max_height = config['max_height']
-        self.__server_on__ = False
         self.fpsCounter = FpsCounter(config['fps'])
         self.width = config['width']
         self.height = config['height']
