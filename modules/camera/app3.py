@@ -25,8 +25,11 @@ sleep(5)
 print(camera.fps)
 
 sleep(2)
+print("set width")
 camera.width = 480
+print("set height")
 camera.height = 360
+print("set fps")
 camera.fps = 20
 
 sleep(10)
