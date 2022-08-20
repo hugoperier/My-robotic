@@ -55,6 +55,7 @@ class CameraImpl:
                 self.fpsCounter.update()
                 yield frame
             else:
+                print("error")
                 break
         print('Stream stopped')
 
