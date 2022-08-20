@@ -80,7 +80,7 @@ class CameraImpl:
     def __server__(self, camera):
         print('Server started')
         self.__server_on__ = True
-        self.__server__ = ThreadedHTTPServer(('', camera.port), CamHandler)
+        self.__server__ = ThreadedHTTPServer(('', camera.port), HTTPVideoStreamHandler)
         self.__server__.camera = camera
         self.__server__.handle_request()
         print('Server stopped')
