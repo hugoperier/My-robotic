@@ -14,7 +14,7 @@ class HTTPVideoStreamHandler(BaseHTTPRequestHandler):
         BaseHTTPRequestHandler.__init__(self, *args)
 
     def do_GET(self):
-        if self.path.endswith('.mjpg'):
+        if self.path.endswith('camera.mjpg'):
             print(self.path)
             self.send_response(200)
             self.send_header('Content-type', 'multipart/x-mixed-replace; boundary=--jpgboundary')
@@ -33,9 +33,8 @@ class HTTPVideoStreamHandler(BaseHTTPRequestHandler):
                     self.end_headers()
                     jpg.save(self.wfile,'JPEG')
                 except:
-                    print('euh')
-                    break
-        print("done serving")
+                    print("done serving")
+                    return
 
     def connection_dropped(self, error, environ=None):
         print("connection dropped")
