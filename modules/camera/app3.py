@@ -12,9 +12,11 @@ config = {
 
 camera = CameraImpl(config)
 
+print("get stream")
 while True:
     for frame in camera.getStream():
         print("Frame received, size: {}, fps {}".format(frame.shape, camera.fpsCounter.fps))
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-    break
+
+print("bye")
