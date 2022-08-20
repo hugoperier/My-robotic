@@ -38,7 +38,7 @@ i=0
 while (True):
     sleep(1)
     print(camera.fps)
-    i+=1
+    i += 1
     if i % 10 == 0:
         camera.fps = camera.fps + 1        
         print("fps upgraded to {}".format(camera.fps))
