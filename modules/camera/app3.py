@@ -24,7 +24,6 @@ sleep(5)
 camera.make_server(8000)
 
 sleep(5)
-sleep(2)
 print("set width")
 camera.width = 640
 print("set height")
