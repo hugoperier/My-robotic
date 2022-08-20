@@ -65,6 +65,7 @@ class CameraImpl:
     def make_server(self, port):
         if self.__server_on__:
             raise RuntimeError('Server is already running')
+        self.port = port
         self.__server_thread__ = Thread(target=self.__server__)
         self.__server_thread__.start()
 
