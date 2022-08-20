@@ -34,13 +34,19 @@ camera.fps = 5
 
 sleep(10)
 
-i=0
-while (True):
-    sleep(1)
-    print(camera.fps)
-    i += 1
-    if i % 10 == 0:
-        camera.fps = camera.fps + 1        
-        print("fps upgraded to {}".format(camera.fps))
+camera.stop_server()
 
-# camera.stop_server()
+print("Sleeping 10 sec then rebooting")
+
+sleep(10)
+
+camera.make_server(8000)
+
+sleep(5)
+sleep(2)
+print("set width")
+camera.width = 640
+print("set height")
+camera.height = 480
+print("set fps")
+camera.fps = 20
