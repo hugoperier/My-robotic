@@ -77,8 +77,8 @@ class CameraImpl:
             self.__server__.socket.close()
             print("self.__server__.server_close()")
             self.__server__.server_close()
-            # print("self.__server__.shutdown()")
-            # self.__server__.shutdown()
+            print("self.__server__.shutdown()")
+            self.__server__.shutdown()
             print("self.__server_thread__.join()")
             self.__server_thread__.join()
             print('Server stopped')
@@ -100,7 +100,7 @@ class CameraImpl:
     def screenshot(self, path):
         if self.is_streaming:
             frame = next(self.getStream())
-        else:
+        else: 
             ret, frame = self.capture.read()
             if not ret:
                 raise RuntimeError('Could not read frame')
