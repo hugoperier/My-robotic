@@ -22,15 +22,19 @@ class HTTPVideoStreamHandler(BaseHTTPRequestHandler):
             camera = self.server.camera
             for frame in camera.get_stream():
                 print("serving frame{}".format(frame.shape))
-                imgRGB = cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
-                jpg = Image.fromarray(imgRGB)
-                tmp = BytesIO()
-                jpg.save(tmp,'JPEG')
-                self.wfile.write("--jpgboundary".encode())
-                self.send_header('Content-type','image/jpeg')
-                self.send_header('Content-length', str(tmp.getbuffer().nbytes))
-                self.end_headers()
-                jpg.save(self.wfile,'JPEG')
+                try:
+                    imgRGB = cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
+                    jpg = Image.fromarray(imgRGB)
+                    tmp = BytesIO()
+                    jpg.save(tmp,'JPEG')
+                    self.wfile.write("--jpgboundary".encode())
+                    self.send_header('Content-type','image/jpeg')
+                    self.send_header('Content-length', str(tmp.getbuffer().nbytes))
+                    self.end_headers()
+                    jpg.save(self.wfile,'JPEG')
+                except KeyboardInterrupt:
+                    print('euh')
+                    break
 
     def connection_dropped(self, error, environ=None):
         print("connection dropped")
