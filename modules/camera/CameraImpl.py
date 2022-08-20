@@ -59,6 +59,30 @@ class CameraImpl:
                 break
         print('Stream stopped')
 
+    def make_server(self, port):
+        if self.__server_on__:
+            raise RuntimeError('Server is already running')
+        self.__server_thread__ = Thread(target=self.__server__, args=(self))
+        self.__server_thread__.start()
+
+    def stop_server(self):
+        if self.__server_on__:
+            self.__server__.socket.close()
+            self.__server__.server_close()
+            self.__server__.shutdown()
+            self.__server_thread__.join()
+            self.__server_on__ = False
+            print('Server stopped')
+
+    def __server__(self, camera):
+        print('Server started')
+        self.__server_on__ = True
+        self.__server__ = ThreadedHTTPServer(('', camera.port), CamHandler)
+        self.__server__.camera = camera
+        self.__server__.handle_request()
+        print('Server stopped')
+        self.__server_on__ = False
+
     def stop_stream(self):
         print('Stream stopping')
         self.is_streaming = False

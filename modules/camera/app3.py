@@ -13,9 +13,8 @@ config = {
 }
 
 camera = CameraImpl(config)
-httpd = ThreadedHTTPServer(('', 8000), HTTPVideoStreamHandler)
-httpd.camera = camera
-print("Server started")
-httpd.handle_request()
+camera.make_server(8000)
+
+sleep(1000)
 
 print("bye")
