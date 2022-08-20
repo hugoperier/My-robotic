@@ -34,6 +34,7 @@ camera.fps = 5
 
 sleep(10)
 
+i=0
 while (True):
     sleep(1)
     print(camera.fps)
