@@ -39,7 +39,8 @@ class CameraImpl:
 
     def getStream(self):
         self.fpsCounter.reset()
-        print("get stream")
+        self.is_streaming = True
+        print("get stream 2")
         while self.is_streaming:
             print("wait")
             self.fpsCounter.wait()

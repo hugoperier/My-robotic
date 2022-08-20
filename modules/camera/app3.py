@@ -12,7 +12,7 @@ config = {
 
 camera = CameraImpl(config)
 
-print("get stream")
+print("get stream 1")
 while True:
     for frame in camera.getStream():
         print("Frame received, size: {}, fps {}".format(frame.shape, camera.fpsCounter.fps))
