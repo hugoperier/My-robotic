@@ -88,8 +88,7 @@ class CameraImpl:
         self.__server_on__ = True
         self.__server__ = ThreadedHTTPServer(('', self.port), HTTPVideoStreamHandler)
         self.__server__.camera = self
-        while(self.__server_on__):
-            self.__server__.handle_request()
+        self.__server__.serve_forever()
         print('Server stopped')
         self.__server_on__ = False
 
