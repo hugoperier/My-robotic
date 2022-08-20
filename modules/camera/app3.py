@@ -15,6 +15,4 @@ config = {
 camera = CameraImpl(config)
 camera.make_server(8000)
 
-time.sleep(1000)
-
-print("bye")
+print("Aaaaahbbbbaaaahbbbbaaaahbbbbaaaahbbbbaaaahbbbbaaaahbbbbaaaahbbbbaaaahbbbb")
