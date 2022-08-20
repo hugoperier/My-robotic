@@ -15,4 +15,19 @@ config = {
 camera = CameraImpl(config)
 camera.make_server(8000)
 
-print("Aaaaahbbbbaaaahbbbbaaaahbbbbaaaahbbbbaaaahbbbbaaaahbbbbaaaahbbbbaaaahbbbb")
+sleep(5)
+print(camera.fps)
+
+sleep(2)
+camera.fps = 10
+
+sleep(5)
+print(camera.fps)
+
+sleep(2)
+camera.width = 480
+camera.height = 360
+
+sleep(10)
+
+camera.stop_server()

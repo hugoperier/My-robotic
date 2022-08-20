@@ -21,7 +21,6 @@ class HTTPVideoStreamHandler(BaseHTTPRequestHandler):
             self.end_headers()
             camera = self.server.camera
             for frame in camera.get_stream():
-                print("serving frame{}".format(frame.shape))
                 try:
                     imgRGB = cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
                     jpg = Image.fromarray(imgRGB)
