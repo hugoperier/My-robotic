@@ -34,8 +34,8 @@ class HTTPVideoStreamHandler(BaseHTTPRequestHandler):
                     jpg.save(self.wfile,'JPEG')
                 except:
                     print('euh')
-                    self.send_response(200)
                     break
+        print("done serving")
 
     def connection_dropped(self, error, environ=None):
         print("connection dropped")
