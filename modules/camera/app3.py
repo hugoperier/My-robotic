@@ -15,6 +15,7 @@ config = {
 camera = CameraImpl(config)
 httpd = ThreadedHTTPServer(('', 8000), HTTPVideoStreamHandler)
 httpd.camera = camera
+print("Server started")
 httpd.handle_request()
 
 print("bye")
