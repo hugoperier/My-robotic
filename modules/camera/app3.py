@@ -1,5 +1,5 @@
 from CameraImpl import CameraImpl
-from FpsCounter import FpsCounter
+from HTTPVideoStreamHandler import HTTPVideoStreamHandler, ThreadedHTTPServer
 import time
 
 config = {
@@ -13,10 +13,8 @@ config = {
 }
 
 camera = CameraImpl(config)
-
-print("get stream 1")
-while True:
-    for frame in camera.getStream():
-        print("Frame received, size: {}, fps {}".format(frame.shape, camera.fpsCounter.fps))
+httpd = ThreadedHTTPServer(('', 8000), HTTPVideoStreamHandler)
+httpd.camera = camera
+httpd.handle_request()
 
 print("bye")
