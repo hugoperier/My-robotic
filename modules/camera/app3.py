@@ -16,7 +16,5 @@ print("get stream 1")
 while True:
     for frame in camera.getStream():
         print("Frame received, size: {}, fps {}".format(frame.shape, camera.fpsCounter.fps))
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
 
 print("bye")
