@@ -32,7 +32,7 @@ class HTTPVideoStreamHandler(BaseHTTPRequestHandler):
                     self.send_header('Content-length', str(tmp.getbuffer().nbytes))
                     self.end_headers()
                     jpg.save(self.wfile,'JPEG')
-                except KeyboardInterrupt:
+                except:
                     print('euh')
                     break
 
