@@ -24,6 +24,7 @@ class HTTPVideoStreamHandler(BaseHTTPRequestHandler):
             self.send_header('Content-type', 'multipart/x-mixed-replace; boundary=--jpgboundary')
             self.end_headers()
             for frame in camera.get_stream():
+                print("serving frame")
                 imgRGB = cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
                 jpg = Image.fromarray(imgRGB)
                 tmp = BytesIO()
