@@ -31,4 +31,4 @@ camera.fps = 2
 
 sleep(10)
 
-camera.stop_server()
+# camera.stop_server()
