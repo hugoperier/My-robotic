@@ -19,7 +19,7 @@ class HTTPVideoStreamHandler(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Content-type', 'multipart/x-mixed-replace; boundary=--jpgboundary')
             self.end_headers()
-            camera = self._server.camera
+            camera = self.server.camera
             self.send_response(200)
             self.send_header('Content-type', 'multipart/x-mixed-replace; boundary=--jpgboundary')
             self.end_headers()
