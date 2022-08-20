@@ -26,7 +26,9 @@ camera.make_server(8000)
 sleep(5)
 print("set width")
 camera.width = 640
+sleep(2)
 print("set height")
 camera.height = 480
+sleep(2)
 print("set fps")
 camera.fps = 20
