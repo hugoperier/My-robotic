@@ -1,6 +1,7 @@
 from CameraImpl import CameraImpl
 from HTTPVideoStreamHandler import HTTPVideoStreamHandler, ThreadedHTTPServer
 from time import sleep
+import cv2
 
 config = {
     'device': "/dev/video0",
