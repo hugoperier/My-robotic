@@ -18,6 +18,7 @@ camera = CameraImpl(config)
 while True:
     print("Waiting for User input: ")
     key = input()
+    print("input: " + key)
     if key == "q":
         print("Quitting")
         break
