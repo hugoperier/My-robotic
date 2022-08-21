@@ -27,7 +27,8 @@ class CameraImpl:
             raise ValueError('Width must be greater than 0')
         if value > self.max_width:
             raise ValueError('Width must be less than maximum {}'.format(self.max_width))
-        self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, value)
+        with self.__mutex__:
+            self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, value)
 
     @property
     def height(self):
@@ -39,7 +40,8 @@ class CameraImpl:
             raise ValueError('Height must be greater than 0')
         if value > self.max_height:
             raise ValueError('Height must be less than maximum {}'.format(self.max_height))
-        self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, value)
+        with self.__mutex__:
+            self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, value)
 
     @property
     def fps(self):
