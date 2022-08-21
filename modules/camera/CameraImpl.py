@@ -1,6 +1,6 @@
 import cv2
 from FpsCounter import FpsCounter
-from threading import Thread
+from threading import Thread, Lock
 from HTTPVideoStreamHandler import HTTPVideoStreamHandler, ThreadedHTTPServer
 
 class CameraImpl:
@@ -15,6 +15,7 @@ class CameraImpl:
         self.height = config['height']
         self.capture.set(cv2.CAP_PROP_SATURATION, config['saturation'])
         self.is_streaming = False
+        self.__mutex__ = Lock()
         
     @property
     def width(self):
@@ -55,10 +56,8 @@ class CameraImpl:
         self.is_streaming = True
         while self.is_streaming:
             self.fpsCounter.wait()
-            if (not self.capture.isOpened()):
-                print('Camera not opened')
-                continue
-            ret, frame = self.capture.read()
+            with self.__mutex__:
+                ret, frame = self.capture.read()
             if ret:
                 self.fpsCounter.update()
                 failCounter = 0
@@ -85,7 +84,7 @@ class CameraImpl:
         if self.__server_on__:
             raise RuntimeError('Server is already running')
         self.port = port
-        self.__server_thread__ = Thread(target=self.__server_serve__)
+        self.__server_thread__ = Thread(target=self.__server_serve__)        
         self.__server_thread__.start()
 
     def stop_server(self):
