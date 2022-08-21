@@ -5,6 +5,7 @@ from HTTPVideoStreamHandler import HTTPVideoStreamHandler, ThreadedHTTPServer
 
 class CameraImpl:
     def __init__(self, config):
+        self.__mutex__ = Lock()
         self.__server_on__ = False
         self.config = config
         self.capture = cv2.VideoCapture(config['device'], cv2.CAP_V4L)
@@ -15,7 +16,6 @@ class CameraImpl:
         self.height = config['height']
         self.capture.set(cv2.CAP_PROP_SATURATION, config['saturation'])
         self.is_streaming = False
-        self.__mutex__ = Lock()
         
     @property
     def width(self):
