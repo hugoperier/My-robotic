@@ -6,6 +6,7 @@ from HTTPVideoStreamHandler import HTTPVideoStreamHandler, ThreadedHTTPServer
 class CameraImpl:
     def __init__(self, config):
         self.__server_on__ = False
+        self.config = config
         self.capture = cv2.VideoCapture(config['device'], cv2.CAP_V4L)
         self.max_width = config['max_width']
         self.max_height = config['max_height']
@@ -49,6 +50,7 @@ class CameraImpl:
 
     def get_stream(self):
         print('Stream started')
+        failCounter = 0
         self.fpsCounter.reset()
         self.is_streaming = True
         while self.is_streaming:
@@ -56,9 +58,16 @@ class CameraImpl:
             ret, frame = self.capture.read()
             if ret:
                 self.fpsCounter.update()
+                failCounter = 0
                 yield frame
             else:
                 print("could not get frame")
+                failCounter += 1
+                if failCounter > 10:
+                    self.capture.release()
+                    self.capture = cv2.VideoCapture(self.config['device'], cv2.CAP_V4L)
+                    self.width = config['width']
+                    self.height = config['height']
                 continue
         print('Stream stopped')
 
