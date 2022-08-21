@@ -15,7 +15,25 @@ config = {
 camera = CameraImpl(config)
 camera.make_server(8000)
 
-sleep(5)
+sleep(1)
+print("set width")
+camera.width = 480
+sleep(2)
+print("set height")
+camera.height = 360
+sleep(2)
+print("set fps")
+camera.fps = 10
+
+sleep(1)
+print("set width")
+camera.width = 640
+sleep(2)
+print("set height")
+camera.height = 480
+sleep(2)
+print("set fps")
+camera.fps = 20
 
 camera.stop_server()
 print("Sleeping 10 sec then rebooting")
@@ -25,10 +43,10 @@ camera.make_server(8000)
 
 sleep(5)
 print("set width")
-camera.width = 640
+camera.width = 480
 sleep(2)
 print("set height")
-camera.height = 480
+camera.height = 360
 sleep(2)
 print("set fps")
-camera.fps = 20
+camera.fps = 10
