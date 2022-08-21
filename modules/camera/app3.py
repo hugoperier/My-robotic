@@ -17,7 +17,7 @@ camera = CameraImpl(config)
 
 while True:
     print("Waiting for User input: ")
-    key = cv2.waitKey(1) & 0xFF
+    key = input()
     if key == ord("q"):
         print("Quitting")
         break
