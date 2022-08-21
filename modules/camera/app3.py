@@ -13,40 +13,24 @@ config = {
 }
 
 camera = CameraImpl(config)
-camera.make_server(8000)
 
-sleep(1)
-print("set width")
-camera.width = 480
-sleep(2)
-print("set height")
-camera.height = 360
-sleep(2)
-print("set fps")
-camera.fps = 10
-
-sleep(1)
-print("set width")
-camera.width = 640
-sleep(2)
-print("set height")
-camera.height = 480
-sleep(2)
-print("set fps")
-camera.fps = 20
-
-camera.stop_server()
-print("Sleeping 10 sec then rebooting")
-sleep(5)
-
-camera.make_server(8000)
-
-sleep(5)
-print("set width")
-camera.width = 480
-sleep(2)
-print("set height")
-camera.height = 360
-sleep(2)
-print("set fps")
-camera.fps = 10
+while True:
+    key = cv2.waitKey(1) & 0xFF
+    if key == ord("q"):
+        break
+    elif key == ord("w"):
+        if (camera.width == 480):
+            camera.width = 640
+            camera.height = 480
+        else:
+            camera.width = 480
+            camera.height = 360
+    elif key == ord("e"):
+        if (camera.fps == 10):
+            camera.fps = 20
+        else:
+            camera.fps = 10
+    elif key == ord("r"):
+        camera.stop_server()
+    elif key == ord("t"):
+        camera.make_server(8000)

@@ -55,6 +55,9 @@ class CameraImpl:
         self.is_streaming = True
         while self.is_streaming:
             self.fpsCounter.wait()
+            if (not self.capture.isOpened()):
+                print('Camera not opened')
+                continue
             ret, frame = self.capture.read()
             if ret:
                 self.fpsCounter.update()
@@ -64,12 +67,19 @@ class CameraImpl:
                 print("could not get frame")
                 failCounter += 1
                 if failCounter > 10:
-                    self.capture.release()
-                    self.capture = cv2.VideoCapture(self.config['device'], cv2.CAP_V4L)
-                    self.width = self.config['width']
-                    self.height = self.config['height']
+                    self.__reset__()
+                    failCounter = 0
                 continue
         print('Stream stopped')
+
+    def __reset__(self):
+        self.capture.release()
+        self.capture = cv2.VideoCapture(self.config['device'], cv2.CAP_V4L)
+        self.width = self.config['width']
+        self.height = self.config['height']
+        self.capture.set(cv2.CAP_PROP_SATURATION, self.config['saturation'])
+        self.fpsCounter.reset()
+        print('Camera reset')
 
     def make_server(self, port):
         if self.__server_on__:
