@@ -18,10 +18,10 @@ camera = CameraImpl(config)
 while True:
     print("Waiting for User input: ")
     key = input()
-    if key == ord("q"):
+    if key == "q":
         print("Quitting")
         break
-    elif key == ord("w"):
+    elif key == "w":
         print("Updating camera resolution")
         if (camera.width == 480):
             camera.width = 640
@@ -29,15 +29,15 @@ while True:
         else:
             camera.width = 480
             camera.height = 360
-    elif key == ord("e"):
+    elif key == "e":
         print("Updating camera fps")
         if (camera.fps == 10):
             camera.fps = 20
         else:
             camera.fps = 10
-    elif key == ord("r"):
+    elif key == "r":
         print("Stopping server")
         camera.stop_server()
-    elif key == ord("t"):
+    elif key == "t":
         print("Starting server")
         camera.make_server(8000)
