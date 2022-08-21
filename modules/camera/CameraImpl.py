@@ -66,8 +66,8 @@ class CameraImpl:
                 if failCounter > 10:
                     self.capture.release()
                     self.capture = cv2.VideoCapture(self.config['device'], cv2.CAP_V4L)
-                    self.width = config['width']
-                    self.height = config['height']
+                    self.width = self.config['width']
+                    self.height = self.config['height']
                 continue
         print('Stream stopped')
 
