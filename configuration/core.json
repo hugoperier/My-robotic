@@ -1,0 +1,11 @@
+{
+    "name": "Development",
+    "modules": [
+        {
+            "id": "vitals",
+            "name": "vitals",
+            "path": "/Users/hugoperier/Projects/Robotic/Programming/My-robotic/modules/core/",
+            "command": "python3 vitals.py"
+        }
+    ]
+}

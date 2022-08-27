@@ -16,4 +16,5 @@ with tqdm(total=100, desc='cpu%', position=1) as cpubar, tqdm(total=100, desc='r
         rambar.refresh()
         cpubar.refresh()
         sleep(0.5)
+        print("tick")
 
