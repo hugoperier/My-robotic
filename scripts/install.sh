@@ -113,6 +113,8 @@ Ros2() {
     sudo apt install python3-colcon-common-extensions
     pip3 install argcomplete
     echo "source /opt/ros/foxy/setup.bash" >> ~/.bashrc
+    sudo apt install python3-rosdep2
+    rosdep update
 }
 
 ##########################
