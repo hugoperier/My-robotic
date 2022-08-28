@@ -26,10 +26,10 @@ class ProcessManager:
     def make_process(self, name, command, dir="."):
         process = Process(name, command, dir)
         if process in self.processes:
-            return False
+            raise ValueError("Process already exists")
         process.start()
         self.add_process(process)
-        return True
+        return process.id
         
     def add_process(self, process, log_cpu=False, log_memory=False):
         """Adds a process to be managed.
@@ -93,12 +93,21 @@ class ProcessManager:
     @property
     def log_period(self):
         return 60 / self.log_frequency
+
+    def start(self):
+        self._server_thread = threading.Thread(target=self.main_loop)
+        self._server_thread.start()
+        self._stop = False
+
+    def stop(self):
+        self._stop = True
+        self._server_thread.join()
+        for process in self.processes:
+            process.kill()
         
     def main_loop(self):
         try:
             start = time.time()
-            self._server_thread = threading.Thread(target=self.server_loop)
-            self._server_thread.start()
             while not self._stop:
                 if time.time() - start > self.log_period:
                     
@@ -111,6 +120,7 @@ class ProcessManager:
                         if process.active:
                             process.process_stdout()
                             process.process_stderr()
+                time.sleep(0.1)
         except KeyboardInterrupt:    
             pass
         finally:

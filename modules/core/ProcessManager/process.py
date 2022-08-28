@@ -11,6 +11,7 @@ from .units import Size, Time
 
 class Process:
     def __init__(self, name, command, dir="."):
+        self.id = id(self)
         self.max_buff_size = 10000
         self.name = name
         self._command = command
@@ -81,9 +82,22 @@ class Process:
     def kill(self):
         self._start = Time(0)
         self._process.kill()
-        self._outstream.close()
-        self._errstream.close()
+        if (self._outstream is not None):
+            self._outstream.close()
+        if (self._errstream is not None):
+            self._errstream.close()
         self._process = None
+
+    def get_info(self):
+        return {
+            "cpu": self.get_cpu_perc(),
+            "mem": self.get_mem_perc(),
+            "mem_usage": self.get_mem_usage().kbytes,
+            "active": self.active,
+            "pid": self.pid,
+            "name": self.name,
+            "id:": self.id
+        }
         
     def update_cpu(self):
         try:
