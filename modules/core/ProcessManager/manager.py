@@ -52,11 +52,13 @@ class ProcessManager:
             self._log_memory.append(process) 
         return True
 
-    def stop_process(self, id):
+    def stop_process(self, id, flush = False):
         """Stop a proces"""
         for process in self.processes:
             if process.id == id:
                 process.kill()
+                if flush:
+                    self.rem_process(process)
                 return True
         return False
             

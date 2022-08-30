@@ -75,21 +75,25 @@ class HTTPCoreServerStreamHandler(BaseHTTPRequestHandler):
 		
 
 	def stop_process(self):
+		process_id = self.body.get("processId")
 		if (self.body == None or self.body == "" or self.body == {} or self.body == []
-			or self.body.get("processId") == None):
+			or process_id == None):
 			self.send_response(400)
 			self.send_header('Content-type', 'text/html')
 			self.end_headers()
 			self.wfile.write("No valid body".encode())
 			return
 		process_id = self.body['processId']
-		success = self.server.process_manager.stop_process(process_id)
+		flush = self.body.get("flush", False)
+		success = self.server.process_manager.stop_process(process_id, flush)
 		if not (success):
 			self.send_response(400)
 			self.send_header('Content-type', 'text/html')
 			self.end_headers()
 			self.wfile.write("No valid process id".encode())
 			return
+		self.send_response(200)
+		self.end_headers()
 
 def load_configuration():
 	with open("/Users/hugoperier/Projects/Robotic/Programming/My-robotic/configuration/core.json") as json_file:

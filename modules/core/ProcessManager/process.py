@@ -66,6 +66,8 @@ class Process:
         self._errbuff = self._errbuff[start:]
         
     def get_stdout(self):
+        if (self._outstream == None):
+            return b""
         self._outstream.flush()
         self._outstream.seek(0)
         r = self._outstream.read()
@@ -73,6 +75,8 @@ class Process:
         return r
     
     def get_stderr(self):
+        if (self._errstream == None):
+            return b""
         self._errstream.flush()
         self._errstream.seek(0)
         r = self._errstream.read()
@@ -81,12 +85,13 @@ class Process:
         
     def kill(self):
         self._start = Time(0)
-        self._process.kill()
+        if (self._process is not None):
+            self._process.kill()
+            self._process = None
         if (self._outstream is not None):
             self._outstream.close()
         if (self._errstream is not None):
             self._errstream.close()
-        self._process = None
 
     def get_info(self):
         return {

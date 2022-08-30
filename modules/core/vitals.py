@@ -7,8 +7,8 @@ def get_vitals():
         "ram": psutil.virtual_memory().percent
     }
 
-    while True:
-        vitals = get_vitals()
-        sleep(0.5)
-        print("tick", vitals)
+while True:
+    vitals = get_vitals()
+    sleep(0.5)
+    print("tick", vitals)
 
