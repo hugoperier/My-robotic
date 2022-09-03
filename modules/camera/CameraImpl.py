@@ -1,7 +1,7 @@
 import cv2
-from FpsCounter import FpsCounter
+from .FpsCounter import FpsCounter
 from threading import Thread, Lock
-from HTTPVideoStreamHandler import HTTPVideoStreamHandler, ThreadedHTTPServer
+from .HTTPVideoStreamHandler import HTTPVideoStreamHandler, ThreadedHTTPServer
 
 class CameraImpl:
     def __init__(self, config):
