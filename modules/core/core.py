@@ -11,6 +11,7 @@ class HTTPCoreServerStreamHandler(BaseHTTPRequestHandler):
 		BaseHTTPRequestHandler.__init__(self, *args)
 	
 	def do_GET(self):
+		print("req")
 		if self.path == '/status':
 			self.status()
 		elif self.path == '/list':
@@ -96,13 +97,15 @@ class HTTPCoreServerStreamHandler(BaseHTTPRequestHandler):
 		self.end_headers()
 
 def load_configuration():
-	with open("/Users/hugoperier/Projects/Robotic/Programming/My-robotic/configuration/core.json") as json_file:
+	with open("./configuration/core.json") as json_file:
 		return json.load(json_file)
 
 if __name__ == '__main__':
 	print("starting forever")
 	configuration = load_configuration()
-	server = ThreadedHTTPServer(('localhost', 8000), HTTPCoreServerStreamHandler)
+
+	port = configuration.get("port")
+	server = ThreadedHTTPServer(('0.0.0.0', port), HTTPCoreServerStreamHandler)
 	server.configuration = configuration
 	server.process_manager = ProcessManager()
 	server.process_manager.start()
