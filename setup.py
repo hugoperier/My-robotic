@@ -1,6 +1,6 @@
 from setuptools import setup
 setup(name='myrobotic',
-version='0.1',
+version='0.2',
 description='My robotic framework for raspberry pi robotics',
 url='#',
 author='Hugo Perier',

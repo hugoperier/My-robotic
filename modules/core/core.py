@@ -1,10 +1,7 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from ProcessManager.manager import ProcessManager
+from modules.utils.ProcessManager import ProcessManager
 from socketserver import ThreadingMixIn
 import json
-
-class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
- 	"""Handle requests in a separate thread."""
 
 class HTTPCoreServerStreamHandler(BaseHTTPRequestHandler):
 	def __init__(self, *args):
@@ -95,18 +92,3 @@ class HTTPCoreServerStreamHandler(BaseHTTPRequestHandler):
 			return
 		self.send_response(200)
 		self.end_headers()
-
-def load_configuration():
-	with open("./configuration/core.json") as json_file:
-		return json.load(json_file)
-
-if __name__ == '__main__':
-	print("starting forever")
-	configuration = load_configuration()
-
-	port = configuration.get("port")
-	server = ThreadedHTTPServer(('0.0.0.0', port), HTTPCoreServerStreamHandler)
-	server.configuration = configuration
-	server.process_manager = ProcessManager()
-	server.process_manager.start()
-	server.serve_forever()

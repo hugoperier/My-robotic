@@ -1,4 +1,4 @@
-from Buzzer import Buzzer 
+from modules.buzzer.Buzzer import Buzzer
 import time
 
 russian_anthem = [

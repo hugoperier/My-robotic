@@ -1,4 +1,5 @@
 from Ultrasonic import Ultrasonic
+from modules.ultrasonic.Ultrasonic import Ultrasonic
 from time import sleep
 
 if __name__ == 'main':
