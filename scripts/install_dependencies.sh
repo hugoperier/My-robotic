@@ -1,4 +1,8 @@
 #!/bin/sh
+#################################################################
+## Install dependancies script to facilitate the installation of 
+## required myrobotics dependencies
+#################################################################
 
 ######################
 ## Global variables ##
@@ -6,6 +10,10 @@
 
 DIRECTORY=~/Libraries
 CORES=$(($(nproc)/2))
+
+######################
+## Help ##
+######################
 
 Instructions() {
     echo ""
@@ -32,9 +40,9 @@ Instructions() {
 
 
 
-##################
-## Basic Tools  ##
-##################
+###################
+## Dependancies  ##
+###################
 
 BasicTools() {
     sudo apt-get install --no-install-recommends --assume-yes apt-utils=2.0.5

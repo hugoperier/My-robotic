@@ -1,3 +1,5 @@
+#!/bin/sh
+
 ## Build python3 package and install it using pip3
 ## Package is identified as "modules"
 

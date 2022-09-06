@@ -1,0 +1,25 @@
+{
+    "device": "/dev/video0",
+    "fps": 20,
+    "width": 640,
+    "height": 480,
+    "saturation": 0.5,
+    "default_resolution": 1,
+    "available_resolutions": [
+        {
+            "label": "low",
+            "width": 426,
+            "height": 240
+        },
+        {
+            "label": "medium",
+            "width": 854,
+            "height": 480
+        },
+        {
+            "label": "high",
+            "width": 1280,
+            "height": 720
+        }
+    ]
+}
