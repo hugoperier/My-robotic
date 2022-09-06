@@ -5,7 +5,7 @@
 ## Usage: install_configuration.sh <configuration folder>
 #################################################################
 
-$MYROBOTICS_DIR=$HOME/.myrobotics
+MYROBOTICS_DIR="$HOME/.myrobotics"
 
 if [ $# -eq 0 ]
   then
@@ -21,10 +21,10 @@ fi
 
 if [ ! -d $MYROBOTICS_DIR ]; then
     mkdir $MYROBOTICS_DIR
+    echo "Folder not existing... creating $MYROBOTICS_DIR"
 fi
 
 cp -r $1/* $MYROBOTICS_DIR
 
-# output files that has been copied
 echo "Configuration files copied:"
-ls $MYROBOTICS_DIR | grep -v ".*\.json"
+find $1 -type f
