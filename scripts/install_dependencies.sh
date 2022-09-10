@@ -21,7 +21,7 @@ Instructions() {
     echo "        The user can select which libraries to install."
     echo ""
     echo "        To install all the libraries execute:"
-    echo "            ./installDependencies.sh All"
+    echo "            ./installDependencies.sh -a"
     echo ""
     echo "        To install specific libraries execute:"
     echo "            ./installDependencies.sh [Library Name 1] [Library Name 2]"
@@ -115,16 +115,18 @@ Install() {
         "Update")            Update                                          ;;
         "BasicTools")        BasicTools                                      ;;
         "Core")              Core                                            ;;
+        "Vision")            Vision                                          ;;
         "Ros2")              Ros2                                            ;;
         *)                   printf. "The library $1 is not available \n"    ;;
     esac
 }
 
 InstallAll() {
-   Update
-   BasicTools
-
-    Ros2
+    Install Update
+    Install BasicTools
+    Install Core
+    Install Vision
+    Install Ros2
 }
 
 ##########
