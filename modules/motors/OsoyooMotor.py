@@ -21,8 +21,8 @@ class OsoyooMotor:
         # self.ENA = 0  #Left motor speed PCA9685 port 0
         # self.ENB = 1  #Right motor speed PCA9685 port 1
 
-        self.pinForward = 23
-        self.pinBackward = 24
+        self.pinForward = 27
+        self.pinBackward = 22
         self.motorSpeedPort = 0
         GPIO.setup(self.pinForward, GPIO.OUT)
         GPIO.setup(self.pinBackward, GPIO.OUT) 
