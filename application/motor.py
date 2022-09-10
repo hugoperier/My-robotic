@@ -21,7 +21,6 @@ motor2 = {
 def test_motor(config):
     print("Testing motor: {}".format(config["name"]))
     motor = OsoyooMotor(config)
-    motors = OsoyooMotor()
     print("move forward")
     motors.forward()
     time.sleep(2)  
