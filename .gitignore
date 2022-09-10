@@ -55,6 +55,10 @@ cover/
 *.mo
 *.pot
 
+# Ros2 build
+install/
+log/
+
 # Django stuff:
 *.log
 local_settings.py
