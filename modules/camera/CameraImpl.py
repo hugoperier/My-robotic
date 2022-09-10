@@ -9,11 +9,11 @@ class CameraImpl:
         self.__server_on__ = False
         self.config = config
         self.capture = cv2.VideoCapture(config['device'], cv2.CAP_V4L)
-        self.max_width = config['max_width']
-        self.max_height = config['max_height']
         self.fpsCounter = FpsCounter(config['fps'])
-        self.width = config['width']
-        self.height = config['height']
+        self.available_resolutions = config['available_resolutions']
+        self.resolution = self.available_resolutions[config['default_resolution']]
+        self.width = self.resolution['width']
+        self.height = self.resolution['height']
         self.capture.set(cv2.CAP_PROP_SATURATION, config['saturation'])
         self.is_streaming = False
         
@@ -25,8 +25,6 @@ class CameraImpl:
     def width(self, value):
         if value < 1:
             raise ValueError('Width must be greater than 0')
-        if value > self.max_width:
-            raise ValueError('Width must be less than maximum {}'.format(self.max_width))
         with self.__mutex__:
             self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, value)
 
@@ -38,10 +36,15 @@ class CameraImpl:
     def height(self, value):
         if value < 1:
             raise ValueError('Height must be greater than 0')
-        if value > self.max_height:
-            raise ValueError('Height must be less than maximum {}'.format(self.max_height))
         with self.__mutex__:
             self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, value)
+
+    def set_resolution(offset):
+        if (offset < 0 or offset > len(self.available_resolutions)):
+            raise ValueError('Camera resolution offset must be included in the available resolution list')
+        self.resolution = self.available_resolutions[offset]
+        self.width = self.resolution["width"]
+        self.height = self.resolution["height"]
 
     @property
     def fps(self):
@@ -82,7 +85,7 @@ class CameraImpl:
         self.fpsCounter.reset()
         print('Camera reset')
 
-    def make_server(self, port):
+    def make_server(self, port=8100):
         if self.__server_on__:
             raise RuntimeError('Server is already running')
         self.port = port
@@ -104,7 +107,7 @@ class CameraImpl:
             print('Server stopped')
 
     def __server_serve__(self):
-        print('Server started')
+        print(f'Server started on port {self.port}')
         self.__server_on__ = True
         self.__server__ = ThreadedHTTPServer(('', self.port), HTTPVideoStreamHandler)
         self.__server__.camera = self
