@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>osoyoo-base</name>
+  <name>osoyoo_base</name>
   <version>0.0.0</version>
   <description>Base control for the Osoyoobot</description>
   <maintainer email="hugo.perier@protonmail.com">hugoperier</maintainer>
@@ -11,7 +11,7 @@
   <test_depend>ament_flake8</test_depend>
   <test_depend>ament_pep257</test_depend>
   <test_depend>python3-pytest</test_depend>
-
+  <exec_depend>myrobotics_protocol</exec_depend>
   <export>
     <build_type>ament_python</build_type>
   </export>

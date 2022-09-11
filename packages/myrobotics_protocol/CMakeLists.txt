@@ -36,6 +36,7 @@ find_package(rosidl_default_generators REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/CameraResolution.msg"
+  "msg/BaseInfos.msg"
   "srv/CameraGetInfos.srv"
   "srv/GlobalSetValue.srv"
   "srv/GlobalResult.srv"

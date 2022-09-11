@@ -1,10 +1,10 @@
 from setuptools import setup
 
-package_name = 'osoyoo-base'
+package_name = 'osoyoo_base'
 
 setup(
     name=package_name,
-    version='0.0.0',
+    version='0.0.1',
     packages=[package_name],
     data_files=[
         ('share/ament_index/resource_index/packages',
@@ -15,7 +15,7 @@ setup(
     zip_safe=True,
     maintainer='hugoperier',
     maintainer_email='hugo.perier@protonmail.com',
-    description='TODO: Package description',
+    description='Raspberry pi robotic base',
     license='Apache License 2.0',
     tests_require=['pytest'],
     entry_points={

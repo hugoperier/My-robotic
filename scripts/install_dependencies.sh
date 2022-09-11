@@ -95,6 +95,10 @@ Vision() {
     sudo apt install libopencv-dev python3-opencv
 }
 
+Motors() {
+   pip3 install Adafruit_PCA9685
+}
+
 ##########################
 ## Installation Process ##
 ##########################
