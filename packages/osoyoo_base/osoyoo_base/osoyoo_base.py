@@ -72,7 +72,7 @@ class OsoyooBaseController(Node):
         else:
             print("The robot is already stopped")
 
-    def keep_alive(self):
+    def keep_alive(self, msg):
         """Keep the robot alive"""
         self.__keep_alive_time__ = datetime.now()
     
