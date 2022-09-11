@@ -39,7 +39,7 @@ class OsoyooBaseController(Node):
         #     10)
 
         self.postInfosPublisher = self.create_publisher(
-            String,
+            BaseInfos,
             'infos',
             10)
 
