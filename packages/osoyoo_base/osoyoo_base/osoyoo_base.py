@@ -32,11 +32,11 @@ class OsoyooBaseController(Node):
             'keep_alive',
             self.keep_alive,
             10)
-        self.setSpeedSubscription = self.create_subscription(
-            Int16,
-            'set_speed',
-            self.listener_callback,
-            10)
+        # self.setSpeedSubscription = self.create_subscription(
+        #     Int16,
+        #     'set_speed',
+        #     self.listener_callback,
+        #     10)
 
         self.postInfosPublisher = self.create_publisher(
             String,
