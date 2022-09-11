@@ -12,7 +12,7 @@ class OsoyooBase:
         
     def set_speed(self, speed):
         for wheel in self.wheels:
-            wheel.set_speed(speed)
+            wheel.changespeed(speed)
         self.speed = speed
         
     def forward(self):
