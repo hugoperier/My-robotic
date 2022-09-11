@@ -13,6 +13,7 @@ class OsoyooMotor:
 
         self.speed = configuration["speed"] # Max pulse length out of 4096
         self.max_speed = configuration["max_speed"]
+        self.is_moving = False
 
         #define L298N(Model-Pi motor drive board) GPIO pins
         # self.IN1 = 23  #Left motor direction pin
@@ -39,14 +40,16 @@ class OsoyooMotor:
 	    GPIO.output(self.pinBackward, GPIO.LOW)
 	    GPIO.output(self.pinForward, GPIO.LOW)
 	    self.changespeed(0)
-
+	    self.is_moving = False
 
     def backward(self):
 	    GPIO.output(self.pinBackward, GPIO.HIGH)
 	    GPIO.output(self.pinForward, GPIO.LOW)
 	    self.changespeed(self.speed)
+	    self.is_moving = True
  
     def forward(self):
         GPIO.output(self.pinForward, GPIO.HIGH)
         GPIO.output(self.pinBackward, GPIO.LOW)
         self.changespeed(self.speed)
+        self.is_moving = True

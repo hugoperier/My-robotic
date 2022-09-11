@@ -1,13 +1,8 @@
-from example_interfaces.srv import AddTwoInts
-
 import rclpy
 from rclpy.node import Node
 from modules.camera.CameraImpl import CameraImpl
 from modules.utils.func_utils import load_configuration
 from myrobotics_protocol.srv import GlobalResult, GlobalSetValue, CameraGetInfos
-
-## Todo: 
-## build ros param pckg, import news in camera and test build
 
 class CameraService(Node):
 

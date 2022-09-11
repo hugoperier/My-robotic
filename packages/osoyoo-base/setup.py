@@ -1,6 +1,6 @@
 from setuptools import setup
 
-package_name = 'osoyoo-motor'
+package_name = 'osoyoo-base'
 
 setup(
     name=package_name,
@@ -20,6 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'osoyoo_base = osoyoo_base.osoyoo_base:main'
         ],
     },
 )

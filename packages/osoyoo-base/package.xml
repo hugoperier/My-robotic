@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>osoyoo-motor</name>
+  <name>osoyoo-base</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>Base control for the Osoyoobot</description>
   <maintainer email="hugo.perier@protonmail.com">hugoperier</maintainer>
   <license>Apache License 2.0</license>
 

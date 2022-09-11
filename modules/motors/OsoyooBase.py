@@ -9,7 +9,16 @@ class OsoyooBase:
         for wheel in configuration["wheels"]:
             self.wheels.append(OsoyooMotor(wheel))
             self.speed = wheel["speed"]
+            self.max_speed = wheel["max_speed"]
         
+    @property
+    def is_moving(self):
+        """Check if the robot is moving"""
+        for wheel in self.wheels:
+            if wheel.is_moving:
+                return True
+        return False
+
     def set_speed(self, speed):
         for wheel in self.wheels:
             wheel.changespeed(speed)
