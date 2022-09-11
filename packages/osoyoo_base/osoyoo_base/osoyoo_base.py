@@ -1,6 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import String
+from std_msgs.msg import String, Int16
 from datetime import datetime
 from modules.motors.OsoyooBase import OsoyooBase
 from modules.utils.func_utils import load_configuration
@@ -33,7 +33,7 @@ class OsoyooBaseController(Node):
             self.keep_alive,
             10)
         self.setSpeedSubscription = self.create_subscription(
-            int16,
+            Int16,
             'set_speed',
             self.listener_callback,
             10)
@@ -100,6 +100,7 @@ def main(args=None):
 
     osoyoo_base = OsoyooBaseController()
 
+    print("Osoyoo base started:")
     rclpy.spin(minimal_publisher)
 
     # Destroy the node explicitly
