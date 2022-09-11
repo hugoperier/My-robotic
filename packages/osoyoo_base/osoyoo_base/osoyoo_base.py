@@ -75,7 +75,6 @@ class OsoyooBaseController(Node):
     def keep_alive(self):
         """Keep the robot alive"""
         self.__keep_alive_time__ = datetime.now()
-        return response
     
     def post_infos_callback(self):
         """Publish paramter from the robot"""
