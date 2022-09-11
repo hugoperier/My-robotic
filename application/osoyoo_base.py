@@ -6,6 +6,7 @@ def test_base():
     configuration = load_configuration("./configuration/osoyoo_base.json")
     base = OsoyooBase(configuration)
 
+    purcent = 50
     while True:
         print("Waiting for User input: ")
         key = input()
@@ -34,6 +35,14 @@ def test_base():
         elif key == 'l':
             print("speed down")
             base.set_speed(base.speed - 100)
+        elif key == 'i':
+            print("speed up")
+            purcent += 10
+            base.set_speed_purcent(purcent)
+        elif key == 'k':
+            print("speed down")
+            purcent -= 10
+            base.set_speed_purcent(purcent)
         
 
 

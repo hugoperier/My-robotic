@@ -29,6 +29,8 @@ class OsoyooMotor:
         GPIO.setup(self.pinBackward, GPIO.OUT) 
 
     def changespeed(self, speed):
+        if speed < 0:
+            speed = 0
         if speed > self.max_speed:
             raise ValueError("Speed must be less than max speed")
         self.pwm.set_pwm(self.motorSpeedPort, 0, speed)
