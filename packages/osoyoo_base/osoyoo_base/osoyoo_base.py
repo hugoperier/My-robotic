@@ -3,12 +3,14 @@ from rclpy.node import Node
 from std_msgs.msg import String
 from datetime import datetime
 from modules.motors.OsoyooBase import OsoyooBase
+from modules.utils.func_utils import load_configuration
 from myrobotics_protocol.msg import BaseInfos
 
 class OsoyooBaseController(Node):
     def __init__(self):
         super().__init__('osoyoo_base')
-        self.robot = OsoyooBase()
+        configuration = load_configuration('/home/pi/.myrobotics/osoyoo_base.json')
+        self.robot = OsoyooBase(configuration)
         self.stream_infos = self.create_publisher(String, 'topic', 10)
 
         self.__keep_alive_timeout__ = 0.5
