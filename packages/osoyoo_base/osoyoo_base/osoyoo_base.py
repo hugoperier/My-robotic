@@ -47,7 +47,7 @@ class OsoyooBaseController(Node):
             keep_alive_timer_period, self.keep_alive_timer_callback
             )
         self.postInfosTimer = self.create_timer(
-            1, self.post_infos_timer_callback
+            1, self.post_infos_callback
             )
 
     def move(self, msg):
