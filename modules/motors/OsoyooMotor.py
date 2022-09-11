@@ -12,6 +12,7 @@ class OsoyooMotor:
         GPIO.setwarnings(False)
 
         self.speed = configuration["speed"] # Max pulse length out of 4096
+        self.max_speed = configuration["max_speed"]
 
         #define L298N(Model-Pi motor drive board) GPIO pins
         # self.IN1 = 23  #Left motor direction pin
@@ -28,7 +29,9 @@ class OsoyooMotor:
         GPIO.setup(self.pinBackward, GPIO.OUT) 
 
     def changespeed(self, speed):
-	    self.pwm.set_pwm(self.motorSpeedPort, 0, speed)
+        if speed > self.max_speed:
+            raise ValueError("Speed must be less than max speed")
+        self.pwm.set_pwm(self.motorSpeedPort, 0, speed)
 
     def stop(self):
 	    GPIO.output(self.pinBackward, GPIO.LOW)

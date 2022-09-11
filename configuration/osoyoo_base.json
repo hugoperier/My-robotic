@@ -1,0 +1,20 @@
+{
+    "wheels": [
+        {
+            "name": "right",
+            "speed": 2000,
+            "max_speed": 3500,
+            "pinForward": 27,
+            "pinBackward": 22,
+            "motorSpeedPort": 1
+        },
+        {
+            "name": "left",
+            "speed": 2000,
+            "max_speed": 3500,
+            "pinForward": 23,
+            "pinBackward": 24,
+            "motorSpeedPort": 0
+        }
+    ]
+}
