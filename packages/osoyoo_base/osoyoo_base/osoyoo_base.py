@@ -79,7 +79,7 @@ class OsoyooBaseController(Node):
     def post_infos_callback(self):
         """Publish paramter from the robot"""
         msg = BaseInfos()
-        msg.name = self.robot.name
+        msg.name = "Osoyoo base"
         msg.wheel_count = len(self.robot.wheels)
         msg.is_moving = self.robot.is_moving
         msg.speed = self.robot.speed
