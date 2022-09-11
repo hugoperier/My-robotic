@@ -1,7 +1,7 @@
 from modules.motors.OsoyooBase import OsoyooBase
 import time
 
-def test_camera():
+def test_base():
     configuration = load_configuration("./configuration/osoyoo_base.json")
     base = OsoyooBase(configuration)
 
@@ -29,7 +29,11 @@ def test_camera():
             base.stop()
         elif key == 'o':
             print("speed up")
-            base.set_speed(base.configuration["speed"] + 100)
+            base.set_speed(base.speed + 100)
+        elif key == 'l':
+            print("speed down")
+            base.set_speed(base.speed - 100)
+        
 
 
 if __name__ == "__main__":
