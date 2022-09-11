@@ -101,12 +101,12 @@ def main(args=None):
     osoyoo_base = OsoyooBaseController()
 
     print("Osoyoo base started:")
-    rclpy.spin(minimal_publisher)
+    rclpy.spin(osoyoo_base)
 
     # Destroy the node explicitly
     # (optional - otherwise it will be done automatically
     # when the garbage collector destroys the node object)
-    minimal_publisher.destroy_node()
+    osoyoo_base.destroy_node()
     rclpy.shutdown()
 
 
