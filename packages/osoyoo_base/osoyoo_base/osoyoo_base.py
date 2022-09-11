@@ -62,10 +62,12 @@ class OsoyooBaseController(Node):
             self.robot.right()
         else:
             print("Unknown move command")
+        self.__keep_alive_time__ = datetime.now()
         return response
 
     def stop(self, msg):
         """Stop the robot"""
+        print("Stopping")
         if (self.robot.is_moving):
             self.robot.stop()
         else:
