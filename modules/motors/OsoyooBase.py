@@ -18,7 +18,7 @@ class OsoyooBase:
     def set_speed_purcent(self, purcent):
         print("Set to {}%".format(purcent))
         for wheel in self.wheels:
-            wheel_speed = wheel.max_speed / 100 * purcent
+            wheel_speed = int(wheel.max_speed / 100 * purcent)
             wheel.changespeed(wheel_speed)
         
     def forward(self):
