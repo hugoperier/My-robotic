@@ -8,10 +8,12 @@ class OsoyooBase:
         self.wheels = []
         for wheel in configuration["wheels"]:
             self.wheels.append(OsoyooMotor(wheel))
+            self.speed = wheel["speed"]
         
     def set_speed(self, speed):
         for wheel in self.wheels:
             wheel.set_speed(speed)
+        self.speed = speed
         
     def forward(self):
         for wheel in self.wheels:

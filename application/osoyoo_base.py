@@ -27,6 +27,9 @@ def test_camera():
         elif key == "f":
             print("stop")
             base.stop()
+        elif key == 'o':
+            print("speed up")
+            base.set_speed(base.configuration["speed"] + 100)
 
 
 if __name__ == "__main__":
