@@ -94,7 +94,7 @@ class OsoyooBaseController(Node):
         now = datetime.now()
         if (now - self.__keep_alive_time__).total_seconds() > self.__keep_alive_timeout__:
             print("Timeout stopped the robot")
-            self.stop()
+            self.robot.stop()
 
 def main(args=None):
     rclpy.init(args=args)
