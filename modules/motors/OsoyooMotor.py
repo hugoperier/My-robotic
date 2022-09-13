@@ -34,6 +34,7 @@ class OsoyooMotor:
             speed = 0
         if speed > self.max_speed:
             raise ValueError("Speed must be less than max speed")
+        self.speed = speed
         self.pwm.set_pwm(self.motorSpeedPort, 0, speed)
 
     def stop(self):

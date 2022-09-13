@@ -32,11 +32,11 @@ class OsoyooBaseController(Node):
             'keep_alive',
             self.keep_alive,
             10)
-        # self.setSpeedSubscription = self.create_subscription(
-        #     Int16,
-        #     'set_speed',
-        #     self.listener_callback,
-        #     10)
+        self.setSpeedSubscription = self.create_subscription(
+            Int16,
+            'set_speed',
+            self.set_speed,
+            10)
 
         self.postInfosPublisher = self.create_publisher(
             BaseInfos,
@@ -71,6 +71,10 @@ class OsoyooBaseController(Node):
             self.robot.stop()
         else:
             print("The robot is already stopped")
+
+    def set_speed(self, msg):
+        self.robot.set_speed_purcent(msg.data)
+        print("change speed")
 
     def keep_alive(self, msg):
         """Keep the robot alive"""
