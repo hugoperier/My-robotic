@@ -58,7 +58,6 @@ BasicTools() {
 
     sudo apt-get install --no-install-recommends --assume-yes python3.8
     sudo apt-get install --no-install-recommends --assume-yes python3-pip
-    pip install --user pipenv
 }
 
 Update() {
@@ -89,6 +88,9 @@ Ros2() {
     echo "source /opt/ros/foxy/setup.bash" >> ~/.bashrc
     sudo apt install python3-rosdep2
     rosdep update
+
+    # RosBridge
+    sudo apt-get install ros-foxy-rosbridge-server
 }
 
 Vision() {
