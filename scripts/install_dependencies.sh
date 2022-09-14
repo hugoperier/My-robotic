@@ -58,6 +58,8 @@ BasicTools() {
 
     sudo apt-get install --no-install-recommends --assume-yes python3.8
     sudo apt-get install --no-install-recommends --assume-yes python3-pip
+
+    sudo apt-get -y install python3-rpi.gpio
 }
 
 Update() {
