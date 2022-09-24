@@ -1,12 +1,25 @@
 {
     "name": "Development",
+    "type": "OsoyooRobot",
     "port": 8000,
+    "connection": {
+        "type": "Rosbridge",
+        "port": 9090
+    },
     "modules": [
         {
-            "id": "vitals",
-            "name": "vitals",
-            "path": "/Users/hugoperier/Projects/Robotic/Programming/My-robotic/modules/core/",
-            "command": "python3 vitals.py"
+            "id": "8d09f4df-9951-4dca-99da-e881b13ff23b",
+            "name": "Osoyoo base",
+            "type": "OsoyooBase",
+            "enabled": true,
+            "command": "ros2 run osoyoo_base osoyoo_base"
+        },
+        {
+            "id": "98932797-ea76-4ce1-b699-842ce54cedc6",
+            "name": "Camera",
+            "type": "RaspberryCamera",
+            "enabled": true,
+            "command": "ros2 run osoyoo_base osoyoo_base"
         }
     ]
 }

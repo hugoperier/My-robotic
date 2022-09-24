@@ -8,12 +8,15 @@ class HTTPCoreServerStreamHandler(BaseHTTPRequestHandler):
 		BaseHTTPRequestHandler.__init__(self, *args)
 	
 	def do_GET(self):
-		print("req")
-		if self.path == '/status':
-			self.status()
-		elif self.path == '/list':
-			print("list")
-			self.list_process()
+		if self.path == '/robot/status':
+			self.robot_status()
+		elif self.path == '/robot/configuration':
+			self.robot_configuration()
+		else:
+			self.send_response(404)
+			self.send_header('Content-type', 'text/html')
+			self.send_header('Access-Control-Allow-Origin', '*')
+			self.end_headers()
 
 	def do_POST(self):
 		body = self.rfile.read(int(self.headers['Content-Length']))
@@ -26,18 +29,41 @@ class HTTPCoreServerStreamHandler(BaseHTTPRequestHandler):
 			self.stop_process()
 		elif self.path == '/connect':
 			self.create_connection()
+		else:
+			self.send_response(404)
+			self.send_header('Content-type', 'text/html')
+			self.send_header('Access-Control-Allow-Origin', '*')
+			self.end_headers()
 
-	def status(self):
+	def robot_configuration(self):
+		modules = [x for x in self.server.configuration.get("modules", []) if x.get("enabled") == True]
+		modules = map(lambda x: {"id": x.get("id"), "name": x.get("name"), "type": x.get("type")}, modules)
+		status = "Available"
+		if (len(self.server.process_manager.processes)):
+			status = "Connected"
+		configuration = {
+			"robot": {
+				"battery": 100,
+				"name": self.server.configuration.get("name"),
+				"type": self.server.configuration.get("type"),
+				"status": status,
+				"connection": self.server.configuration.get("connection"),
+				"modules": list(modules)
+			}
+		}
 		self.send_response(200)
 		self.send_header('Content-type', 'application/json')
+		self.send_header('Access-Control-Allow-Origin', '*')
 		self.end_headers()
-		
-	def list_process(self):
-		self.send_response(200)
+		self.wfile.write(json.dumps(configuration).encode())
+
+	def robot_status(self):
 		processes = []
 		for i in self.server.process_manager.processes:
 			processes.append(i.get_info())
+		self.send_response(200)
 		self.send_header('Content-type', 'application/json')
+		self.send_header('Access-Control-Allow-Origin', '*')
 		self.end_headers()
 		self.wfile.write(json.dumps(processes).encode())
 
@@ -46,6 +72,7 @@ class HTTPCoreServerStreamHandler(BaseHTTPRequestHandler):
 			or self.body.get("processId") == None or self.body.get("name") == None):
 			self.send_response(400)
 			self.send_header('Content-type', 'text/html')
+			self.send_header('Access-Control-Allow-Origin', '*')
 			self.end_headers()
 			self.wfile.write("No valid body".encode())
 			return
@@ -54,6 +81,7 @@ class HTTPCoreServerStreamHandler(BaseHTTPRequestHandler):
 		if not (len(processInfos) > 0):
 			self.send_response(400)
 			self.send_header('Content-type', 'text/html')
+			self.send_header('Access-Control-Allow-Origin', '*')
 			self.end_headers()
 			self.wfile.write("No valid process id".encode())
 			return
@@ -68,6 +96,7 @@ class HTTPCoreServerStreamHandler(BaseHTTPRequestHandler):
 
 		self.send_response(200)
 		self.send_header('Content-type', 'application/json')
+		self.send_header('Access-Control-Allow-Origin', '*')
 		self.end_headers()
 		self.wfile.write(json.dumps({"processId": process_id}).encode()) 
 		
@@ -78,6 +107,7 @@ class HTTPCoreServerStreamHandler(BaseHTTPRequestHandler):
 			or process_id == None):
 			self.send_response(400)
 			self.send_header('Content-type', 'text/html')
+			self.send_header('Access-Control-Allow-Origin', '*')
 			self.end_headers()
 			self.wfile.write("No valid body".encode())
 			return
@@ -87,6 +117,7 @@ class HTTPCoreServerStreamHandler(BaseHTTPRequestHandler):
 		if not (success):
 			self.send_response(400)
 			self.send_header('Content-type', 'text/html')
+			self.send_header('Access-Control-Allow-Origin', '*')
 			self.end_headers()
 			self.wfile.write("No valid process id".encode())
 			return
