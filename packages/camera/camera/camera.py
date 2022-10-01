@@ -8,7 +8,7 @@ class CameraService(Node):
 
     def __init__(self):
         super().__init__('camera')
-        config = load_configuration("/home/hugoperier/.myrobotics/camera_raspberry.json")
+        config = load_configuration("/home/pi/.myrobotics/camera_raspberry.json")
         self.camera = CameraImpl(config)
 
         self.camera_set_fps = self.create_service(GlobalSetValue, 'set_fps', self.set_fps)
