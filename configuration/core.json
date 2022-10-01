@@ -12,21 +12,24 @@
             "name": "Osoyoo base",
             "type": "base",
             "enabled": true,
-            "command": "ros2 run osoyoo_base osoyoo_base"
+            "command": "ros2 run osoyoo_base osoyoo_base",
+            "path": "/home/hugoperier/projects/My-robotic"
         },
         {
             "id": "98932797-ea76-4ce1-b699-842ce54cedc6",
             "name": "Camera",
             "type": "camera",
             "enabled": true,
-            "command": "ros2 run camera rpi_camera"
+            "command": "ros2 run camera rpi_camera",
+            "path": "/home/hugoperier/projects/My-robotic"
         },
         {
             "id": "c0b1b0a1-1b1a-4b1a-9b1a-1b1a0b1a1b1a",
             "name": "Rosbridge",
             "type": "Rosbridge",
             "enabled": true,
-            "command": "ros2 launch rosbridge_server rosbridge_websocket_launch.xml"
+            "command": "ros2 launch rosbridge_server rosbridge_websocket_launch.xml",
+            "path": "/home/hugoperier/projects/My-robotic"
         }
     ]
 }

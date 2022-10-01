@@ -3,7 +3,7 @@ import os
 import subprocess
 import tempfile
 import threading
-
+from signal import SIGINT
 import psutil
 
 from .units import Size, Time
@@ -42,6 +42,8 @@ class Process:
                                              stdout=self._outstream,
                                              stderr=self._errstream)
         else:
+            print("starting popen with")
+            print(self._command.split())
             self._process = subprocess.Popen(self._command.split())
         os.chdir(previous)
             
@@ -86,12 +88,18 @@ class Process:
     def kill(self):
         self._start = Time(0)
         if (self._process is not None):
+            self._process.send_signal(SIGINT)
+            self._process.wait(timeout=10)
             self._process.kill()
+            self._process.terminate()
+            self._process.communicate()
+            del self._process 
             self._process = None
         if (self._outstream is not None):
             self._outstream.close()
         if (self._errstream is not None):
             self._errstream.close()
+        print("Killed process " + str(self.id))
 
     def get_info(self):
         return {
@@ -105,6 +113,7 @@ class Process:
         }
         
     def update_cpu(self):
+        print("update cpu")
         try:
             self._cpu_usage = psutil.Process(self.pid).cpu_percent(0.5) / psutil.cpu_count()
         except psutil.NoSuchProcess:
