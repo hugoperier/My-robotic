@@ -5,7 +5,7 @@ from modules.utils.ProcessManager import ProcessManager
 
 if __name__ == '__main__':
 	print("starting forever")
-	configuration = load_configuration("/home/pi/.myrobotics/osoyoo_base.json")
+	configuration = load_configuration("/home/pi/.myrobotics/core.json")
 
 	port = configuration.get("port")
 	server = ThreadedHTTPServer(('0.0.0.0', port), HTTPCoreServerStreamHandler)
