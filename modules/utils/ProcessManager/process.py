@@ -10,8 +10,11 @@ from .units import Size, Time
 
 
 class Process:
-    def __init__(self, name, command, dir="."):
-        self.id = id(self)
+    def __init__(self, name, command, dir=".", id=None):
+        if (id == None):
+            self.id = id(self)
+        else:
+            self.id = id
         self.max_buff_size = 10000
         self.name = name
         self._command = command
@@ -99,7 +102,7 @@ class Process:
             self._outstream.close()
         if (self._errstream is not None):
             self._errstream.close()
-        print("Killed process " + str(self.id))
+        print("Killed process " + self.id)
 
     def get_info(self):
         return {
@@ -109,7 +112,7 @@ class Process:
             "active": self.active,
             "pid": self.pid,
             "name": self.name,
-            "id:": self.id
+            "id": self.id
         }
         
     def update_cpu(self):

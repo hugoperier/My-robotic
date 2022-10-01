@@ -23,8 +23,8 @@ class ProcessManager:
         self._log_memory = []
         self._stop = False
 
-    def make_process(self, name, command, dir="."):
-        process = Process(name, command, dir)
+    def make_process(self, name, command, dir=".", id=None):
+        process = Process(name, command, dir, id)
         if process in self.processes:
             raise ValueError("Process already exists")
         process.start()

@@ -95,7 +95,7 @@ class HTTPCoreServerStreamHandler(BaseHTTPRequestHandler):
             return
 
         try:
-            process_id = self.server.process_manager.make_process(self.body['name'], processInfos[0].get("command"), processInfos[0].get("path"))
+            process_id = self.server.process_manager.make_process(self.body['name'], processInfos[0].get("command"), processInfos[0].get("path"), process_id)
         except ValueError as e:
             self.send_response(400)
             self.send_header('Content-type', 'text/html')
