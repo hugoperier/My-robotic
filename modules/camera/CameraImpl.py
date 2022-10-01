@@ -118,6 +118,7 @@ class CameraImpl:
     def stop_stream(self):
         print('Stream stopping')
         self.is_streaming = False
+        self.capture.release()
 
     def screenshot(self, path):
         if self.is_streaming:

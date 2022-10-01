@@ -17,13 +17,6 @@ class CameraService(Node):
         self.camera_stop_service = self.create_service(GlobalResult, 'stop_camera', self.stop_camera)
         self.camera_get_infos_service = self.create_service(CameraGetInfos, "getInfos", self.get_infos)
 
-
-    def add_two_ints_callback(self, request, response):
-        response.sum = request.a + request.b
-        self.get_logger().info('Incoming request\na: %d b: %d' % (request.a, request.b))
-
-        return response
-
     def set_fps(self, request, response):
         """Set parameter of the camera (width, height, fps)"""
 
