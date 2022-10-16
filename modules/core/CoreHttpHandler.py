@@ -9,32 +9,32 @@ class CoreHttpHandler(HttpRequestHandler):
         post = {
             "/start": self.start_process,
             "/stop": self.stop_process,
-            "/connect": self.create_connection
         }
         HttpRequestHandler.__init__(self, get, post, *args)
-        # self.add_route("GET", "/robot/status", self.robot_status)
-        # self.add_route("GET", "/robot/configuration", self.robot_configuration)
-        # self.add_route("POST", "/start", self.start_process)
-        # self.add_route("POST", "/stop", self.stop_process)
-        # self.add_route("POST", "/connect", self.create_connection)
-        # self.add_routes(get, post)
 
-    def robot_status(self, t):
-        print("robot_status")
-        self.success()
+    def robot_status(self):
+        status = self.server.core.get_processes_status()
+        self.send_json(status)
 
     def robot_configuration(self):
-        print("robot_configuration")
-        self.success()
+        configuration = self.server.core.get_configuration()
+        self.send_json(configuration)
 
     def start_process(self):
-        print("start_process")
-        self.success()
+        try:
+            print("start_process")
+            process_id = self.server.core.make_process(self.body.get("processId"))
+            self.send_json(data={"processId": process_id})
+        except ValueError as e:
+            print(str(e))
+            self.send_error(400, str(e))
     
     def stop_process(self):
-        print("stop_process")
-        self.success()
+        try:
+            process_id = self.body.get("processId")
+            flush = self.body.get("flush")
+            self.server.core.stop_process(process_id, flush)
+            self.success()
+        except ValueError as e:
+            self.send_error(400, str(e))
     
-    def create_connection(self):
-        print("create_connection")
-        self.success()
