@@ -1,4 +1,5 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
+import json
 
 class HttpRequestHandler(BaseHTTPRequestHandler):
     def __init__(self, *args):
@@ -10,24 +11,39 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
         }
         BaseHTTPRequestHandler.__init__(self, *args[2:])
 
-    # def add_route(self, method, path, handler):
-    #     if method not in self.routes:
-    #         raise Exception("Invalid method")
-    #     if path in self.routes[method]:
-    #         raise Exception("Route already exists")
-    #     self.routes[method][path] = handler
+    # Used to answer CORS preflight requests
+    def do_OPTIONS(self):
+        self.send_response(200, "ok")
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'GET, OPTIONS')
+        self.send_header("Access-Control-Allow-Headers", "X-Requested-With")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.end_headers()
 
     def do_GET(self):
         print("GET", self.path)
         if self.path in self.routes["GET"]:
-            self.routes["GET"][self.path](self)
+            try:
+                self.routes["GET"][self.path]()
+            except Exception as e:
+                print("GET - 500 - " + str(e))
+                print(e)
+                self.send_error(500, "Internal error happens")
         else:
             self.not_found()
         
     def do_POST(self):
+        body = self.rfile.read(int(self.headers['Content-Length']))
+        self.body = json.loads(body.decode())
         print("POST", self.path)
+        print("body", self.body)
         if self.path in self.routes["POST"]:
-            self.routes["POST"][self.path](self)
+            try:
+                self.routes["POST"][self.path]()
+            except Exception as e:
+                print("GET - 500 - " + str(e))
+                print(e)
+                self.send_error(500, "Internal error happens")
         else:
             self.not_found()
     
