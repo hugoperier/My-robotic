@@ -13,7 +13,9 @@ class Core:
         if (len(processInfos) == 0):
             raise ValueError("No valid process id")
         processInfo = processInfos[0]
-        process_id = self.process_manager.make_process(processInfo.get('name'), processInfo.get("command"), processInfo.get("path"), processId)
+        process_id = self.process_manager.make_process(processInfo.get('name'), processInfo.get("command"), processInfo.get("path"), processId, initializer=processInfo.get("initializer"))
+        process = self.process_manager.get_process(process_id)
+        process.waitForReady()
         return process_id
 
     def stop_process(self, processId, flush):

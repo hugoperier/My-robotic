@@ -23,11 +23,12 @@ class ProcessManager:
         self._log_memory = []
         self._stop = False
 
-    def make_process(self, name, command, dir=".", id=None):
-        process = Process(name, command, dir, id)
+    def make_process(self, name, command, dir=".", id=None, initializer=None):
+        process = Process(name, command, dir, id, initializer=initializer)
+        print(initializer)
         if process in self.processes:
             raise ValueError("Process already exists")
-        process.start()
+        process.start(True)
         self.add_process(process)
         return process.id
         
@@ -87,6 +88,12 @@ class ProcessManager:
         log_file = os.path.join(self.log_dir, process.name)
         with open(log_file+"_log_mem", "ab") as file:
             file.write(struct.pack("d", process.get_mem_usage().bytes))
+
+    def get_process(self, id):
+        for process in self.processes:
+            if process.id == id:
+                return process
+        return None
         
     @property
     def has_activeprocesses(self):

@@ -30,6 +30,15 @@
             "enabled": true,
             "command": "ros2 launch rosbridge_server rosbridge_websocket_launch.xml",
             "path": "/home/hugoperier/projects/My-robotic"
+        },
+        {
+            "id": "c0b1b0a1-1b1a-4b1a-9b1a-1b1a0b1a1b1b",
+            "name": "test",
+            "type": "test",
+            "enabled": true,
+            "command": "python3 test.py",
+            "path": "/Users/hugoperier/Projects/Robotic/Programming/My-robotic",
+            "initializer": "Initialized"
         }
     ]
 }

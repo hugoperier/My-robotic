@@ -10,7 +10,7 @@ from .units import Size, Time
 
 
 class Process:
-    def __init__(self, name, command, dir=".", id=None):
+    def __init__(self, name, command, dir=".", id=None, initializer=None):
         if (id == None):
             self.id = id(self)
         else:
@@ -24,8 +24,11 @@ class Process:
         self._thread = None
         self._outstream = None
         self._errstream = None
+        self.initialized = False
         self._outbuff = b""
         self._errbuff = b""
+        self.line = ""
+        self.initializer = initializer
         self._dir = dir
         print(self._dir)
         
@@ -41,9 +44,11 @@ class Process:
         if pipe:
             self._outstream = tempfile.TemporaryFile()
             self._errstream = tempfile.TemporaryFile()
+            print("starting popen with")
+            print(self._command.split())
             self._process = subprocess.Popen(self._command.split(),
-                                             stdout=self._outstream,
-                                             stderr=self._errstream)
+                                             stdout=subprocess.PIPE,
+                                             stderr=subprocess.PIPE)
         else:
             print("starting popen with")
             print(self._command.split())
@@ -57,36 +62,67 @@ class Process:
     @property
     def stderr(self):
         return self._errbuff
+
+    def waitForReady(self):
+        if (self.initializer is None):
+            print("no initialiser")
+            return True
+        from time import sleep
+        attempts = 0
+        maxAttempts = 70
+        while not self.initialized:
+            print("not ready")
+            print(self.line)
+            if self.initializer in self.line:
+                self.initialized = True
+                return True
+            if attempts > maxAttempts:
+                self.initialized = False
+                return False
+            attempts += 1
+            sleep(0.25)
             
     def process_stdout(self):
-        new = self.get_stdout().replace(b"\x00", b"")
-        self._outbuff += new
-        start = max(0, len(self._outbuff)-self.max_buff_size)
-        self._outbuff = self._outbuff[start:]
+        # new = self.get_stdout().replace(b"\x00", b"")
+        # self._outbuff += new
+        # print("outbuff" + str(self._outbuff))
+        # start = max(0, len(self._outbuff)-self.max_buff_size)
+        # self._outbuff = self._outbuff[start:]
+        line = self._process.stdout.readline()
+        print(line)
+        if line:
+            self.line = line.decode("utf-8")
+            print(self.line)
             
     def process_stderr(self):
-        new = self.get_stderr().replace(b"\x00", b"")
-        self._errbuff += new
-        start = max(0, len(self._errbuff)-self.max_buff_size)
-        self._errbuff = self._errbuff[start:]
+        # new = self.get_stderr().replace(b"\x00", b"")
+        # self._errbuff += new
+        # start = max(0, len(self._errbuff)-self.max_buff_size)
+        # self._errbuff = self._errbuff[start:]
+        line = self._process.stdout.readline()
+        print(line)
+        if line:
+            self.line = line.decode("utf-8")
+            print(self.line)
         
-    def get_stdout(self):
-        if (self._outstream == None):
-            return b""
-        self._outstream.flush()
-        self._outstream.seek(0)
-        r = self._outstream.read()
-        self._outstream.truncate(0)
-        return r
+    # def get_stdout(self):
+    #     if (self._outstream == None):
+    #         print("nothing...")
+    #         return b""
+    #     self._outstream.flush()
+    #     self._outstream.seek(0)
+    #     r = self._outstream.read()
+    #     self._outstream.truncate(0)
+    #     return r
     
-    def get_stderr(self):
-        if (self._errstream == None):
-            return b""
-        self._errstream.flush()
-        self._errstream.seek(0)
-        r = self._errstream.read()
-        self._errstream.truncate(0)
-        return r
+    # def get_stderr(self):
+    #     if (self._errstream == None):
+    #         return b""
+    #     self._errstream.flush()
+    #     self._errstream.seek(0)
+    #     r = self._errstream.read()
+    #     self._errstream.truncate(0)
+    #     return r
         
     def kill(self):
         self._start = Time(0)
@@ -102,6 +138,8 @@ class Process:
             self._outstream.close()
         if (self._errstream is not None):
             self._errstream.close()
+        
+        self.initialized = False
         print("Killed process " + self.id)
 
     def get_info(self):
