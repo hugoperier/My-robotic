@@ -33,10 +33,8 @@ class HTTPVideoStreamHandler(BaseHTTPRequestHandler):
                     jpg.save(self.wfile,'JPEG')
                 except:
                     print("done serving")
-                    return
+                    break
+            camera.stop_stream()
 
     def connection_dropped(self, error, environ=None):
         print("connection dropped")
-
-    # def set_camera(self, camera):
-    #     self.camera = camera
