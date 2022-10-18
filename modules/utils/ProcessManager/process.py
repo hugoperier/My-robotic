@@ -81,13 +81,10 @@ class Process:
                 return False
             attempts += 1
             sleep(0.25)
+        if not self.initialized:
+            print("Initialisation failed...")
             
     def process_stdout(self):
-        # new = self.get_stdout().replace(b"\x00", b"")
-        # self._outbuff += new
-        # print("outbuff" + str(self._outbuff))
-        # start = max(0, len(self._outbuff)-self.max_buff_size)
-        # self._outbuff = self._outbuff[start:]
         line = self._process.stdout.readline()
         print(line)
         if line:
@@ -95,34 +92,11 @@ class Process:
             print(self.line)
             
     def process_stderr(self):
-        # new = self.get_stderr().replace(b"\x00", b"")
-        # self._errbuff += new
-        # start = max(0, len(self._errbuff)-self.max_buff_size)
-        # self._errbuff = self._errbuff[start:]
         line = self._process.stdout.readline()
         print(line)
         if line:
             self.line = line.decode("utf-8")
             print(self.line)
-        
-    # def get_stdout(self):
-    #     if (self._outstream == None):
-    #         print("nothing...")
-    #         return b""
-    #     self._outstream.flush()
-    #     self._outstream.seek(0)
-    #     r = self._outstream.read()
-    #     self._outstream.truncate(0)
-    #     return r
-    
-    # def get_stderr(self):
-    #     if (self._errstream == None):
-    #         return b""
-    #     self._errstream.flush()
-    #     self._errstream.seek(0)
-    #     r = self._errstream.read()
-    #     self._errstream.truncate(0)
-    #     return r
         
     def kill(self):
         self._start = Time(0)
@@ -154,7 +128,6 @@ class Process:
         }
         
     def update_cpu(self):
-        print("update cpu")
         try:
             self._cpu_usage = psutil.Process(self.pid).cpu_percent(0.5) / psutil.cpu_count()
         except psutil.NoSuchProcess:
