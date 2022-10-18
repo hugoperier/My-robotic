@@ -1,18 +1,11 @@
 from modules.camera.CameraImpl import CameraImpl
 from modules.camera.HTTPVideoStreamHandler import HTTPVideoStreamHandler
+from modules.utils.func_utils import load_configuration
 from time import sleep
 import cv2
 
 def test_camera():
-    config = {
-        'device': "/dev/video0",
-        'max_width': 1920,
-        'max_height': 1080,
-        'fps': 20,
-        'width': 640,
-        'height': 480,
-        'saturation': 0.5
-    }
+    config = load_configuration("camera_raspberry.json")
 
     camera = CameraImpl(config)
 

@@ -16,6 +16,7 @@ class CameraImpl:
         self.height = self.resolution['height']
         self.capture.set(cv2.CAP_PROP_SATURATION, config['saturation'])
         self.is_streaming = False
+        self.streaming_clients = 0
         
     @property
     def width(self):
@@ -59,6 +60,7 @@ class CameraImpl:
         failCounter = 0
         self.fpsCounter.reset()
         self.is_streaming = True
+        self.streaming_clients += 1
         while self.is_streaming:
             self.fpsCounter.wait()
             with self.__mutex__:
@@ -117,8 +119,10 @@ class CameraImpl:
 
     def stop_stream(self):
         print('Stream stopping')
-        self.is_streaming = False
-        self.capture.release()
+        self.streaming_clients -= 1
+        if (self.streaming_clients == 0):
+            self.is_streaming = False
+            self.capture.release()
 
     def screenshot(self, path):
         if self.is_streaming:
