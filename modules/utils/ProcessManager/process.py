@@ -78,22 +78,19 @@ class Process:
                 return True
             if attempts > maxAttempts:
                 self.initialized = False
+                print("Initialisation failed...")
                 return False
             attempts += 1
             sleep(0.25)
-        if not self.initialized:
-            print("Initialisation failed...")
             
     def process_stdout(self):
         line = self._process.stdout.readline()
-        print(line)
         if line:
             self.line = line.decode("utf-8")
             print(self.line)
             
     def process_stderr(self):
         line = self._process.stdout.readline()
-        print(line)
         if line:
             self.line = line.decode("utf-8")
             print(self.line)
