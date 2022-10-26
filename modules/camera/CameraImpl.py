@@ -97,7 +97,10 @@ class CameraImpl:
     def stop_server(self):
         if self.__server_on__:
             self.__server_on__ = False
-            self.stop_stream()
+            print("stopp_strem")
+            # self.stop_stream()
+            self.is_streaming = False
+            self.capture.release()
             print("self.__server__.socket.close()")
             self.__server__.socket.close()
             print("self.__server__.server_close()")
@@ -120,6 +123,7 @@ class CameraImpl:
     def stop_stream(self):
         print('Stream stopping')
         self.streaming_clients -= 1
+        print(f'client count {self.streaming_clients}')
         if (self.streaming_clients == 0):
             self.is_streaming = False
             self.capture.release()
