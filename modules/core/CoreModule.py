@@ -25,7 +25,7 @@ class Core:
 
     def get_configuration(self):
         modules = [x for x in self.configuration.get("modules", []) if x.get("enabled") == True]
-        modules = map(lambda x: {"id": x.get("id"), "name": x.get("name"), "type": x.get("type")}, modules)
+        modules = map(lambda x: {"id": x.get("id"), "name": x.get("name"), "type": x.get("type"), "framePackage": x.get("framePackage")}, modules)
         status = "Available"
         if (len(self.process_manager.processes)):
             status = "Connected"
