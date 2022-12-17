@@ -3,7 +3,7 @@ import time
 from modules.utils.func_utils import load_configuration
 
 def test_base():
-    configuration = load_configuration("./configuration/osoyoo_base.json")
+    configuration = load_configuration("/osoyoo_base.json")
     base = OsoyooBase(configuration)
 
     purcent = 50
