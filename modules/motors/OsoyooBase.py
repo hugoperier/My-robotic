@@ -5,11 +5,9 @@ class OsoyooBase:
         self.i = 0
         self.configuration = configuration
 
-        self.wheels = []
-        for wheel in configuration["wheels"]:
-            self.wheels.append(OsoyooMotor(wheel))
-            self.speed = wheel["speed"]
-            self.max_speed = wheel["max_speed"]
+        self.left_wheel = OsoyooMotor(configuration["wheels"]["left"])
+        self.right_wheel = OsoyooMotor(configuration["wheels"]["right"])
+        self.max_speed = configuration["max_speed"]
         
     @property
     def is_moving(self):
@@ -19,33 +17,39 @@ class OsoyooBase:
                 return True
         return False
 
-    def set_speed(self, speed):
-        for wheel in self.wheels:
-            wheel.changespeed(speed)
-        self.speed = speed
-    
-    def set_speed_purcent(self, purcent):
-        print("Set to {}%".format(purcent))
-        for wheel in self.wheels:
-            wheel_speed = int(wheel.max_speed / 100 * purcent)
-            wheel.changespeed(wheel_speed)
-        
-    def forward(self):
-        for wheel in self.wheels:
-            wheel.forward()
+    def set_velocity(self, x, yaw):
+        if ((not (0 < x < 100)) or (not (0 < yaw < 100))):
+            raise ValueError("Velocity must be define between 0 and 100")
 
-    def backward(self):
-        for wheel in self.wheels:
-            wheel.backward()
+        # Calculate the velocity of each wheel
+        wheel_velocity_left = x
+        wheel_velocity_right = x
+
+        # Adjust the velocity of each wheel based on the yaw value
+        if yaw > 0:
+            wheel_velocity_left = max(0, wheel_velocity_left - yaw)
+            wheel_velocity_right = min(100, wheel_velocity_right + yaw)
+        elif yaw < 0:
+            wheel_velocity_left = min(100, wheel_velocity_left - yaw)
+            wheel_velocity_right = max(0, wheel_velocity_right + yaw)
+        
+    def set_velocity(x, yaw):
+        if ((not (-100 <= x <= 100)) or (not (-100 <= yaw <= 100))):
+            raise ValueError("Velocity must be define between -100 and 100")
+
+            if x > 0:
+                if yaw > 0:
+                    return [x, max(0, x-yaw)]
+                else:
+                    return [max(0,x+yaw), x]
+            elif x < 0:
+                if yaw > 0:
+                    return [min(0,x+yaw), x]
+                else:
+                    return [x, min(0,x-yaw)]
+            else:
+                    return [0, yaw]
 
     def stop(self):
         for wheel in self.wheels:
             wheel.stop()
-
-    def left(self):
-        self.wheels[0].backward()
-        self.wheels[1].forward()
-
-    def right(self):
-        self.wheels[0].forward()
-        self.wheels[1].backward()

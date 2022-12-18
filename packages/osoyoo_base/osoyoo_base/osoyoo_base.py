@@ -4,7 +4,7 @@ from std_msgs.msg import String, Int16
 from datetime import datetime
 from modules.motors.OsoyooBase import OsoyooBase
 from modules.utils.func_utils import load_configuration
-from myrobotics_protocol.msg import BaseInfos
+from myrobotics_protocol.msg import BaseInfos, Velocity
 
 class OsoyooBaseController(Node):
     def __init__(self):
@@ -18,9 +18,9 @@ class OsoyooBaseController(Node):
         keep_alive_timer_period = 0.5  # seconds        
 
         self.moveSubscription = self.create_subscription(
-            String,
-            'move',
-            self.move,
+            Velocity,
+            'set_velocity',
+            self.set_velocity,
             10)
         self.stopSubscription = self.create_subscription(
             String,
@@ -49,6 +49,10 @@ class OsoyooBaseController(Node):
         self.postInfosTimer = self.create_timer(
             1, self.post_infos_callback
             )
+
+    def set_velocity(self, msg):
+        """Apply the transformation received to the robot to move it"""
+        self.robot.set_velocity()
 
     def move(self, msg):
         """Move the robot"""
