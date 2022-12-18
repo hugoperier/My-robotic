@@ -17,7 +17,7 @@ class OsoyooBase:
                 return True
         return False
         
-    def set_velocity(x, yaw):
+    def set_velocity(self, x, yaw):
         if ((not (-100 <= x <= 100)) or (not (-100 <= yaw <= 100))):
             raise ValueError("Velocity must be define between -100 and 100")
 
