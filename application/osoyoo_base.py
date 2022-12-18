@@ -6,7 +6,8 @@ def test_base():
     configuration = load_configuration("./osoyoo_base.json")
     base = OsoyooBase(configuration)
 
-    v1, v2 = 0
+    v1 = 0
+    v2 = 0
     while True:
         print(f"x: {v1} yaw: {v2}")
         print("Waiting for User input: ")
