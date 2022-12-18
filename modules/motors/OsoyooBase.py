@@ -53,5 +53,5 @@ class OsoyooBase:
             return [0, yaw]
 
     def stop(self):
-        for wheel in self.wheels:
-            wheel.stop()
+        self.left_wheel.stop()
+        self.right_wheel.stop()
