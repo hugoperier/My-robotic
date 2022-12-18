@@ -23,6 +23,7 @@ def test_base():
             print("r")
             base.set_velocity(v1, v2)
         elif key == "q":
+            base.stop()
             break
 
 if __name__ == "__main__":
