@@ -22,10 +22,8 @@ def test_base():
         elif key == "r":
             print("r")
             base.set_velocity(v1, v2)
-        elif key == "q":
+        elif key == "p":
             base.stop()
-        elif key == "l":
-            break
 
 if __name__ == "__main__":
     test_base()
