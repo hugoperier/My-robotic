@@ -22,13 +22,16 @@ class OsoyooBase:
             raise ValueError("Velocity must be define between -100 and 100")
 
         velocities = self.get_velocity_absolute(x, yaw)
-        self.left_wheel.changespeed(abs(velocities[0]) * self.left_wheel.max_speed / 100)
+
+        left_wheel_speed = int(abs(velocities[0]) * self.left_wheel.max_speed / 100)
+        self.left_wheel.changespeed(left_wheel_speed)
         if velocities[0] > 0:
             self.left_wheel.forward()
         elif velocities[0] < 0:
             self.left_wheel.backward()
 
-        self.right_wheel.changespeed(abs(velocities[1]) * self.right_wheel.max_speed / 100)
+        right_weel_speed = int(abs(velocities[1]) * self.right_wheel.max_speed / 100)
+        self.right_wheel.changespeed(right_weel_speed)
         if velocities[1] > 0:
             self.right_wheel.forward()
         elif velocities[1] < 0:
