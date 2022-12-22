@@ -13,6 +13,11 @@ class OsoyooBase:
     def is_moving(self):
         """Check if the robot is moving"""
         return self.left_wheel.is_moving or self.right_wheel.is_moving
+
+    @property
+    def speed(self):
+        """Check if the robot is moving"""
+        return max(self.left_wheel.speed, self.right_wheel.speed)
         
     def set_velocity(self, x, yaw):
         if ((not (-100 <= x <= 100)) or (not (-100 <= yaw <= 100))):
