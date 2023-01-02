@@ -96,13 +96,21 @@ class Process:
             print(self.line)
         
     def kill(self):
+        print("Killing process1" + self.id)
+        print(self._process.pid)
         self._start = Time(0)
         if (self._process is not None):
+            print("Killing process2" + self.id)
             self._process.send_signal(SIGINT)
-            self._process.wait(timeout=10)
+            print("Killing process3" + self.id)
+            self._process.wait(timeout=100)
+            print("Killing process4" + self.id)
             self._process.kill()
+            print("Killing process5" + self.id)
             self._process.terminate()
+            print("Killing process6" + self.id)
             self._process.communicate()
+            print("Killing process7" + self.id)
             del self._process 
             self._process = None
         if (self._outstream is not None):

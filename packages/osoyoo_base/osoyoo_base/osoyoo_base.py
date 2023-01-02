@@ -4,7 +4,7 @@ from std_msgs.msg import String, Int16
 from datetime import datetime
 from modules.motors.OsoyooBase import OsoyooBase
 from modules.utils.func_utils import load_configuration
-from myrobotics_protocol.msg import BaseInfos
+from myrobotics_protocol.msg import BaseInfos, Velocity
 
 class OsoyooBaseController(Node):
     def __init__(self):
@@ -18,9 +18,9 @@ class OsoyooBaseController(Node):
         keep_alive_timer_period = 0.5  # seconds        
 
         self.moveSubscription = self.create_subscription(
-            String,
-            'move',
-            self.move,
+            Velocity,
+            'set_velocity',
+            self.set_velocity,
             10)
         self.stopSubscription = self.create_subscription(
             String,
@@ -31,11 +31,6 @@ class OsoyooBaseController(Node):
             String,
             'keep_alive',
             self.keep_alive,
-            10)
-        self.setSpeedSubscription = self.create_subscription(
-            Int16,
-            'set_speed',
-            self.set_speed,
             10)
 
         self.postInfosPublisher = self.create_publisher(
@@ -50,18 +45,9 @@ class OsoyooBaseController(Node):
             1, self.post_infos_callback
             )
 
-    def move(self, msg):
-        """Move the robot"""
-        if (msg.data == "forward"):
-            self.robot.forward()
-        elif (msg.data == "backward"):
-            self.robot.backward()
-        elif (msg.data == "left"):
-            self.robot.left()
-        elif (msg.data == "right"):
-            self.robot.right()
-        else:
-            print("Unknown move command")
+    def set_velocity(self, msg):
+        """Apply the transformation received to the robot to move it"""
+        self.robot.set_velocity(msg.x, msg.yaw)
         self.__keep_alive_time__ = datetime.now()
 
     def stop(self, msg):
@@ -72,10 +58,6 @@ class OsoyooBaseController(Node):
         else:
             print("The robot is already stopped")
 
-    def set_speed(self, msg):
-        self.robot.set_speed_purcent(msg.data)
-        print("change speed")
-
     def keep_alive(self, msg):
         """Keep the robot alive"""
         self.__keep_alive_time__ = datetime.now()
@@ -84,7 +66,6 @@ class OsoyooBaseController(Node):
         """Publish paramter from the robot"""
         msg = BaseInfos()
         msg.name = "Osoyoo base"
-        msg.wheel_count = len(self.robot.wheels)
         msg.is_moving = self.robot.is_moving
         msg.speed = self.robot.speed
         msg.max_speed = self.robot.max_speed
