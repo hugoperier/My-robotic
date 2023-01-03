@@ -3,9 +3,9 @@ from modules.utils.func_utils import load_configuration
 
 class Core:
     def __init__(self, configuration):
-        self.process_manager = ProcessManager()
+        logDirectory = configuration.get("logDirectory")
+        self.process_manager = ProcessManager(logDirectory)
         self.process_manager.start()
-        self.configuration = configuration
 
     def make_process(self, processId):
         print(self.configuration.get("modules", []), processId)

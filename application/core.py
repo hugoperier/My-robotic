@@ -1,7 +1,6 @@
 from modules.utils.func_utils import load_configuration
 from modules.utils.threaded_http_server import ThreadedHTTPServer
 from modules.core.CoreHttpHandler import CoreHttpHandler
-from modules.utils.ProcessManager import ProcessManager
 from modules.core.CoreModule import Core
 
 if __name__ == '__main__':
