@@ -4,6 +4,7 @@ import select
 import shlex
 import struct
 import threading
+from threading import  Lock
 import time
 
 from .process import Process
@@ -22,12 +23,22 @@ class ProcessManager:
         self._log_cpu = []
         self._log_memory = []
         self._stop = False
+        self.__mutex__ = Lock()
 
     def make_process(self, name, command, dir=".", id=None, initializer=None):
-        process = Process(name, command, dir, id, initializer=initializer)
+        process = Process(name, command, dir, id, initializer=initializer, logDirectory=self.log_dir)
         if process in self.processes:
             raise ValueError("Process already exists")
-        process.start(True)
+        print("MAKE Process :")
+        print("-----------")
+        print(f"Name: {process.name}")
+        print(f"Id: {process.id}")
+        print(f"dir: {process._dir}")
+        print(f"command: {process.command}")
+        print(f"initializer: {process.initializer}")
+        print(f"logDirectory: {process._logdirectory}")
+        print("-----------> Starting")
+        process.start()
         log = False if self.log_dir == None else True
         self.add_process(process, log, log)
         return process.id
@@ -75,6 +86,7 @@ class ProcessManager:
         if self.log_dir is None:
             raise ValueError("Log directory wasn't specified")
         if not os.path.isdir(self.log_dir):
+            print("logdir + " + self.log_dir)
             os.mkdir(self.log_dir)
             
     def log_process_cpu(self, process):
@@ -118,7 +130,7 @@ class ProcessManager:
         try:
             start = time.time()
             while not self._stop:
-                if time.time() - start > self.log_period:
+                if time.time() - start > 1:
                     
                     start = time.time()
                     for process in self.processes:
@@ -126,11 +138,13 @@ class ProcessManager:
                             self.log_process_memory(process)
                         if process in self._log_cpu:
                             self.log_process_cpu(process)
-                        if process.active:
-                            process.process_stdout()
-                            process.process_stderr()
+                        with self.__mutex__:
+                            if process.active:
+                                process.process_stdout()
+                                process.process_stderr()
                 time.sleep(0.1)
         except KeyboardInterrupt:    
             pass
         finally:
+            print("process stop")
             self._stop = True

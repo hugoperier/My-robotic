@@ -26,7 +26,7 @@ class CoreHttpHandler(HttpRequestHandler):
             process_id = self.server.core.make_process(self.body.get("processId"))
             self.send_json(data={"processId": process_id})
         except ValueError as e:
-            print(str(e))
+            print("ERROR " +str(e))
             self.send_error(400, str(e))
     
     def stop_process(self):

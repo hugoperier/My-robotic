@@ -5,12 +5,12 @@ import tempfile
 import threading
 from signal import SIGINT
 import psutil
-
+import datetime
 from .units import Size, Time
 
 
 class Process:
-    def __init__(self, name, command, dir=".", id=None, initializer=None):
+    def __init__(self, name, command, dir=".", id=None, initializer=None, logDirectory=None):
         if (id == None):
             self.id = id(self)
         else:
@@ -24,33 +24,34 @@ class Process:
         self._thread = None
         self._outstream = None
         self._errstream = None
+        self._logdirectory = logDirectory
+        self._pipe = False if logDirectory == None else True
         self.initialized = False
         self._outbuff = b""
         self._errbuff = b""
         self.line = ""
         self.initializer = initializer
         self._dir = dir
-        print(self._dir)
         
     def __eq__(self, other):
         return isinstance(other, Process) and other.name == self.name
         
-    def start(self, pipe=False):
+    def start(self):
         previous = os.path.abspath(os.curdir)
         os.chdir(self._dir)
         if self.active:
             raise OSError("Process is already running")
         self._start = datetime.datetime.now()
-        if pipe:
+        if self._pipe:
             self._outstream = tempfile.TemporaryFile()
             self._errstream = tempfile.TemporaryFile()
-            print("starting popen with")
             print(self._command.split())
             self._process = subprocess.Popen(self._command.split(),
                                              stdout=subprocess.PIPE,
                                              stderr=subprocess.PIPE)
+            os.set_blocking(self._process.stdout.fileno(), False)
+            os.set_blocking(self._process.stderr.fileno(), False)
         else:
-            print("starting popen with")
             print(self._command.split())
             self._process = subprocess.Popen(self._command.split())
         os.chdir(previous)
@@ -71,14 +72,13 @@ class Process:
         attempts = 0
         maxAttempts = 70
         while not self.initialized:
-            print("not ready")
-            print(self.line)
             if self.initializer in self.line:
                 self.initialized = True
+                print(f"{self.id} Initialized")
                 return True
             if attempts > maxAttempts:
                 self.initialized = False
-                print("Initialisation failed...")
+                print(f"{self.id} Initialisation failed...")
                 return False
             attempts += 1
             sleep(0.25)
@@ -87,13 +87,22 @@ class Process:
         line = self._process.stdout.readline()
         if line:
             self.line = line.decode("utf-8")
-            print(self.line)
+            if not self._logdirectory == None:
+                    self.log(self.line)
             
     def process_stderr(self):
-        line = self._process.stdout.readline()
+        line = self._process.stderr.readline()
         if line:
             self.line = line.decode("utf-8")
-            print(self.line)
+            if not self._logdirectory == None:
+                self.log(self.line, "E")
+
+    def log(self, line, level = "I"):
+        dt_string = datetime.datetime.now().strftime("%H:%M:%S")
+        formated = f"[{dt_string}]-{self.name}-{level}---{line}"
+        print(formated)
+        with open(f"{self._logdirectory}/{self.name}.log", "a") as myfile:
+            myfile.write(formated)
         
     def kill(self):
         print("Killing process1" + self.id)
