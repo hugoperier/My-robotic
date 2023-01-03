@@ -4,6 +4,7 @@ from modules.utils.func_utils import load_configuration
 class Core:
     def __init__(self, configuration):
         logDirectory = configuration.get("logDirectory")
+        self.configuration = configuration
         self.process_manager = ProcessManager(logDirectory)
         self.process_manager.start()
 
