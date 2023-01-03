@@ -28,7 +28,7 @@ class ProcessManager:
         if process in self.processes:
             raise ValueError("Process already exists")
         process.start(True)
-        self.add_process(process)
+        self.add_process(process, True, True)
         return process.id
         
     def add_process(self, process, log_cpu=False, log_memory=False):
