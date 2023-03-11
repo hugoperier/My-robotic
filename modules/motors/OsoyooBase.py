@@ -24,7 +24,7 @@ class OsoyooBase:
             raise ValueError("Velocity must be define between -100 and 100")
 
         velocities = self.get_velocity_absolute(x, yaw)
-        print(f"moving using velocity [{velocities[0]};{velocities[1]}]")
+        print(f"moving using velocity [{velocities[0]};{velocities[1]}]", flush=True)
 
         left_wheel_speed = int(abs(velocities[0]) * self.left_wheel.max_speed / 100)
         self.left_wheel.changespeed(left_wheel_speed)

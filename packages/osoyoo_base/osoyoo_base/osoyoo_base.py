@@ -47,6 +47,7 @@ class OsoyooBaseController(Node):
 
     def set_velocity(self, msg):
         """Apply the transformation received to the robot to move it"""
+        print("receive velocity" + str(msg.x) + str(msg.yaw), flush=True)
         self.robot.set_velocity(msg.x, msg.yaw)
         self.__keep_alive_time__ = datetime.now()
 

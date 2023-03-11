@@ -3,12 +3,12 @@ from modules.utils.func_utils import load_configuration
 
 class Core:
     def __init__(self, configuration):
-        self.process_manager = ProcessManager()
-        self.process_manager.start()
+        logDirectory = configuration.get("logDirectory")
         self.configuration = configuration
+        self.process_manager = ProcessManager(logDirectory)
+        self.process_manager.start()
 
     def make_process(self, processId):
-        print(self.configuration.get("modules", []), processId)
         processInfos = [x for x in self.configuration.get("modules", []) if x["id"] == processId]
         if (len(processInfos) == 0):
             raise ValueError("No valid process id")

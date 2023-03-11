@@ -2,6 +2,7 @@
     "name": "Development",
     "type": "OsoyooRobot",
     "port": 8000,
+    "logDirectory": "~/Projects/Robotic/Programming/My-robotic/trash",
     "connection": {
         "type": "Rosbridge",
         "port": 9090
@@ -13,7 +14,8 @@
             "type": "base",
             "enabled": true,
             "command": "ros2 run osoyoo_base osoyoo_base",
-            "path": "/home/hugoperier/projects/My-robotic"
+            "path": "/home/hugoperier/projects/My-robotic",
+            "framePackage": "osoyooBase"
         },
         {
             "id": "98932797-ea76-4ce1-b699-842ce54cedc6",
@@ -21,7 +23,8 @@
             "type": "camera",
             "enabled": true,
             "command": "ros2 run camera rpi_camera",
-            "path": "/home/hugoperier/projects/My-robotic"
+            "path": "/home/hugoperier/projects/My-robotic",
+            "framePackage": "neutron-camera"
         },
         {
             "id": "c0b1b0a1-1b1a-4b1a-9b1a-1b1a0b1a1b1a",
@@ -38,8 +41,7 @@
             "type": "test",
             "enabled": true,
             "command": "python3 test.py",
-            "path": "/Users/hugoperier/Projects/Robotic/Programming/My-robotic",
-            "initializer": "Initialized"
+            "path": "/Users/hugoperier/Projects/Robotic/Programming/My-robotic"
         }
     ]
 }
