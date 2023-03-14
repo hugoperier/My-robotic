@@ -1,16 +1,18 @@
 import datetime
 import os
 import subprocess
+import psutil
 import tempfile
 import threading
 from signal import SIGINT
 import psutil
 import datetime
 from .units import Size, Time
+from time import sleep
 
 
 class Process:
-    def __init__(self, name, command, dir=".", id=None, initializer=None, logDirectory=None):
+    def __init__(self, name, command, dir=".", id=None, initializer=None, pipe=False):
         if (id == None):
             self.id = id(self)
         else:
@@ -24,18 +26,17 @@ class Process:
         self._thread = None
         self._outstream = None
         self._errstream = None
-        self._logdirectory = logDirectory
-        self._pipe = False if logDirectory == None else True
+        self._pipe = pipe
         self.initialized = False
         self._outbuff = b""
         self._errbuff = b""
         self.line = ""
         self.initializer = initializer
         self._dir = dir
-        
+
     def __eq__(self, other):
         return isinstance(other, Process) and other.name == self.name
-        
+
     def start(self):
         previous = os.path.abspath(os.curdir)
         os.chdir(self._dir)
@@ -55,18 +56,18 @@ class Process:
             print(self._command.split())
             self._process = subprocess.Popen(self._command.split())
         os.chdir(previous)
-            
+
     @property
     def stdout(self):
         return self._outbuff
-    
+
     @property
     def stderr(self):
         return self._errbuff
 
     def waitForReady(self):
         if (self.initializer is None):
-            print("no initialiser")
+            print(f"[{self.name}] - No initialiser")
             return True
         from time import sleep
         attempts = 0
@@ -74,61 +75,49 @@ class Process:
         while not self.initialized:
             if self.initializer in self.line:
                 self.initialized = True
-                print(f"{self.id} Initialized")
+                print(f"[{self.name}] - Initialized")
                 return True
             if attempts > maxAttempts:
                 self.initialized = False
-                print(f"{self.id} Initialisation failed...")
+                print(f"[{self.name}] Initialisation failed...")
                 return False
             attempts += 1
             sleep(0.25)
-            
+
     def process_stdout(self):
         line = self._process.stdout.readline()
         if line:
             self.line = line.decode("utf-8")
-            if not self._logdirectory == None:
-                    self.log(self.line)
-            
+            print(f"[{self.name}] - {self.line}")
+
     def process_stderr(self):
         line = self._process.stderr.readline()
         if line:
             self.line = line.decode("utf-8")
-            if not self._logdirectory == None:
-                self.log(self.line, "E")
 
-    def log(self, line, level = "I"):
-        dt_string = datetime.datetime.now().strftime("%H:%M:%S")
-        formated = f"[{dt_string}]-{self.name}-{level}---{line}"
-        print(formated)
-        with open(f"{self._logdirectory}/{self.name}.log", "a") as myfile:
-            myfile.write(formated)
-        
     def kill(self):
-        print("Killing process1" + self.id)
-        print(self._process.pid)
+        print(f"[{self.name}] - Killing process ")
         self._start = Time(0)
         if (self._process is not None):
-            print("Killing process2" + self.id)
+            process_obj = psutil.Process(self._process.pid)
+            children = process_obj.children(recursive=True)
+            for child in children:
+                child.kill()
+            sleep(0.1)  # give some time for childs to deinitialize
             self._process.send_signal(SIGINT)
-            print("Killing process3" + self.id)
-            self._process.wait(timeout=100)
-            print("Killing process4" + self.id)
+            # self._process.wait(timeout=100)
             self._process.kill()
-            print("Killing process5" + self.id)
             self._process.terminate()
-            print("Killing process6" + self.id)
-            self._process.communicate()
-            print("Killing process7" + self.id)
-            del self._process 
+            # self._process.communicate()
+            del self._process
             self._process = None
         if (self._outstream is not None):
             self._outstream.close()
         if (self._errstream is not None):
             self._errstream.close()
-        
+
         self.initialized = False
-        print("Killed process " + self.id)
+        print(f"[{self.name}] - Killed process ")
 
     def get_info(self):
         return {
@@ -140,48 +129,49 @@ class Process:
             "name": self.name,
             "id": self.id
         }
-        
+
     def update_cpu(self):
         try:
-            self._cpu_usage = psutil.Process(self.pid).cpu_percent(0.5) / psutil.cpu_count()
+            self._cpu_usage = psutil.Process(
+                self.pid).cpu_percent(0.5) / psutil.cpu_count()
         except psutil.NoSuchProcess:
             pass
-        
+
     @property
     def command(self):
         return self._command
-        
+
     @property
     def active(self):
         if self._process is None:
             return False
         return self._process.poll() is None
-    
-    @property 
+
+    @property
     def pid(self):
         if self.active:
             return self._process.pid
         return -1
-    
+
     @property
     def uptime(self):
         if self.active:
             return Time(datetime.datetime.now()-self._start)
         else:
             return Time(0)
-    
+
     def get_mem_usage(self):
         if self.active:
             return Size(psutil.Process(self.pid).memory_info().vms)
         else:
             return Size(0)
-    
+
     def get_mem_perc(self):
         if self.active:
             return psutil.Process(self.pid).memory_percent("vms")
         else:
             return 0
-    
+
     def get_cpu_perc(self):
         if self.active:
             if self._thread is None or not self._thread.is_alive():
