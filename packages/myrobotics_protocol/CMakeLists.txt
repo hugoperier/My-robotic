@@ -38,6 +38,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/CameraResolution.msg"
   "msg/BaseInfos.msg"
   "msg/Velocity.msg"
+  "msg/CameraInfo.msg"
   "srv/CameraGetInfos.srv"
   "srv/GlobalSetValue.srv"
   "srv/GlobalResult.srv"

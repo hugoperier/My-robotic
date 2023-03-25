@@ -40,12 +40,13 @@ class CameraImpl:
         with self.__mutex__:
             self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, value)
 
-    def set_resolution(offset):
+    def set_resolution(self, offset):
         if (offset < 0 or offset > len(self.available_resolutions)):
             raise ValueError('Camera resolution offset must be included in the available resolution list')
-        self.resolution = self.available_resolutions[offset]
-        self.width = self.resolution["width"]
-        self.height = self.resolution["height"]
+        resolution = self.available_resolutions[offset]
+        self.width = resolution["width"]
+        self.height = resolution["height"]
+        self.resolution = resolution
 
     @property
     def fps(self):

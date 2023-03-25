@@ -10,7 +10,11 @@ def load_configuration(path, with_prefix=True):
 		prefix = os.environ.get(MYROBOTICS_ROOT, "")
 		if (prefix == ""):
 			print("MYROBOTICS_ROOT environment variable not set")
+			raise Exception("MYROBOTICS_ROOT environment variable not set")
 	file_path = os.path.join(prefix, path)
+	
+	if not (os.access(file_path, os.F_OK)):
+		raise OSError(f"Configuration {file_path} does not exist")
 	with open(file_path) as json_file:
 		return json.load(json_file)
 

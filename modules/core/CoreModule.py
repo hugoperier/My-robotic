@@ -1,7 +1,7 @@
 from modules.utils.ProcessManager import ProcessManager
 from modules.utils.func_utils import load_configuration, get_time
 import psutil
-
+import os
 
 class Core:
     def __init__(self, configuration):
@@ -9,6 +9,14 @@ class Core:
         self.name = self.configuration.get("name")
         self.type = self.configuration.get("type")
         self.connection = self.configuration.get("connection")
+        self.modules = [x for x in self.configuration.get("modules", [])]
+        try:
+            self.modules = list(map(lambda x: {**x, 'configuration': load_configuration(x.get(
+                'configuration'))} if type(x.get('configuration')) == str else x, self.modules))
+        except Exception as e:
+            print("[CORE] Error while initializing, existing program")
+            print(str(e))
+            exit(1)
         self.process_manager = ProcessManager()
         self.process_manager.start()
         self.operation_time = -1
@@ -35,8 +43,7 @@ class Core:
             raise ValueError("No valid process id")
 
     def get_enabled_modules(self):
-        modules = [x for x in self.configuration.get(
-            "modules", []) if x.get("enabled") == True]
+        modules = [x for x in self.modules if x.get("enabled") == True]
         modules = map(lambda x: {"id": x.get("id"), "name": x.get("name"), "type": x.get(
             "type"), "framePackage": x.get("framePackage"), "configuration": x.get("configuration")}, modules)
         return modules
