@@ -42,6 +42,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/CameraGetInfos.srv"
   "srv/GlobalSetValue.srv"
   "srv/GlobalResult.srv"
+  "srv/WebRTCNegociation.srv"
 )
 
 ament_package()

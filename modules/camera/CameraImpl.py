@@ -33,6 +33,7 @@ class CameraImpl:
     def height(self):
         return self.capture.get(cv2.CAP_PROP_FRAME_HEIGHT)
 
+
     @height.setter
     def height(self, value):
         if value < 1:
