@@ -26,7 +26,7 @@ class OsoyooBaseController(Node):
             String,
             'stop',
             self.stop,
-            10)
+            1)
         self.keepAliveSubscription = self.create_subscription(
             String,
             'keep_alive',
