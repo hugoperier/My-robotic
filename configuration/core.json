@@ -3,7 +3,7 @@
     "type": "OsoyooRobot",
     "port": 8000,
     "logDirectory": "~/Projects/Robotic/Programming/My-robotic/trash",
-    "connection": {
+    "context": {
         "type": "Rosbridge",
         "port": 9090
     },
