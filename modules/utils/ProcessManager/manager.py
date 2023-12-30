@@ -68,7 +68,10 @@ class ProcessManager:
         """Stop a proces"""
         for process in self.processes:
             if process.id == id:
-                process.kill()
+                try:
+                    process.kill()
+                except:
+                    print(f"Failed to kill part with process {process.id}")
                 if flush:
                     self.rem_process(process)
                 return True
@@ -106,6 +109,7 @@ class ProcessManager:
         self._server_thread.join()
         for process in self.processes:
             process.kill()
+        self.processes = []
 
     def main_loop(self):
         try:

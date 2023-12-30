@@ -34,7 +34,11 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
         
     def do_POST(self):
         body = self.rfile.read(int(self.headers['Content-Length']))
-        self.body = json.loads(body.decode())
+        decoded = body.decode()
+        if (decoded != ''):
+            self.body = json.loads(decoded)
+        else:
+            self.body = {}
         print("POST", self.path)
         print("body", self.body)
         if self.path in self.routes["POST"]:

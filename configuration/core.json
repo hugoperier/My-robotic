@@ -1,47 +1,22 @@
 {
+    "id": "",
     "name": "Development",
     "type": "OsoyooRobot",
+    "neutronCoreUri": "http://192.168.3.55:3003",
     "port": 8000,
+    "linked": false,
+    "secretKey": "",
     "logDirectory": "~/Projects/Robotic/Programming/My-robotic/trash",
     "context": {
-        "type": "Rosbridge",
-        "port": 9090
+        "type": "ros2"
     },
-    "modules": [
+    "parts": [
         {
-            "id": "8d09f4df-9951-4dca-99da-e881b13ff23b",
-            "name": "Osoyoo base",
-            "type": "base",
-            "enabled": true,
-            "command": "ros2 run osoyoo_base osoyoo_base",
-            "path": "/home/hugoperier/projects/My-robotic",
-            "framePackage": "osoyooBase"
-        },
-        {
-            "id": "98932797-ea76-4ce1-b699-842ce54cedc6",
-            "name": "Camera",
-            "type": "camera",
-            "enabled": true,
-            "command": "ros2 run camera rpi_camera",
-            "path": "/home/hugoperier/projects/My-robotic",
-            "framePackage": "neutron-camera"
-        },
-        {
-            "id": "c0b1b0a1-1b1a-4b1a-9b1a-1b1a0b1a1b1a",
-            "name": "Rosbridge",
-            "type": "Rosbridge",
-            "enabled": true,
-            "command": "ros2 launch rosbridge_server rosbridge_websocket_launch.xml",
-            "path": "/home/hugoperier/projects/My-robotic",
-            "initializer": "Rosbridge WebSocket server started"
-        },
-        {
-            "id": "c0b1b0a1-1b1a-4b1a-9b1a-1b1a0b1a1b1b",
-            "name": "test",
-            "type": "test",
-            "enabled": true,
-            "command": "python3 test.py",
-            "path": "/Users/hugoperier/Projects/Robotic/Programming/My-robotic"
+            "id": "",
+            "name": "Good part",
+            "category": "vision",
+            "ros2Node": "visionador",
+            "ros2Package": "visionador"
         }
     ]
 }

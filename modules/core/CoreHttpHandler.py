@@ -4,38 +4,52 @@ class CoreHttpHandler(HttpRequestHandler):
     def __init__(self, *args):
         get = {
             "/robot/status": self.robot_status,
-            "/robot/configuration": self.robot_configuration
         }
         post = {
-            "/start": self.start_process,
-            "/stop": self.stop_process,
+            "/robot/start": self.start_robot,
+            "/robot/stop": self.stop_robot,
         }
         HttpRequestHandler.__init__(self, get, post, *args)
 
     def robot_status(self):
-        processes_status = self.server.core.get_processes_status()
-        status = {
-            "battery": -1,
-            "cpu": self.server.core.cpu_usage,
-            "memory": self.server.core.memory_usage,
-            "operationTime": self.server.core.operation_time,
-            "modules": list(processes_status)
-        }
-        self.send_json(status)
+        status = 'Online'
+        processes = []
 
-    def robot_configuration(self):
-        modules = self.server.core.get_enabled_modules()
-        configuration = {
-            "robot": {
-                "battery": -1,
-                "name": self.server.core.name,
-                "type": self.server.core.type,
-                "status": self.server.core.status,
-                "connection": self.server.core.connection,
-                "modules": list(modules) #now test (and remove me)
-            }
+        if (self.server.core.process_manager != None and 
+        len(self.server.core.process_manager.processes) > 0):
+            status = 'Operating'
+            processes = list(self.server.core.get_processes_status())
+
+        systemInformations = {
+            "status": status,
+            "battery": self.server.core.get_battery(),
+            "system": {
+                "cpu": self.server.core.cpu_usage,
+                "memory": self.server.core.memory_usage,
+            },
+            "location": {
+                "name": self.server.core.get_location()
+            },
+            "processes": processes
         }
-        self.send_json(configuration)
+        self.send_json(systemInformations)
+
+
+    def start_robot(self):
+        try:
+            self.server.core.start_robot()
+            self.success()
+        except ValueError as e:
+            print("ERROR " +str(e))
+            self.send_error(400, str(e))
+
+    def stop_robot(self):
+        try:
+            self.server.core.stop_robot()
+            self.success()
+        except ValueError as e:
+            print("ERROR " +str(e))
+            self.send_error(400, str(e))
 
     def start_process(self):
         try:

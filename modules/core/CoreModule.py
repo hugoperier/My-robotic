@@ -6,30 +6,71 @@ import json
 import requests
 import threading
 import time
+import hashlib
 
 class Core:
     def __init__(self, configuration):
+        self.stop_event = threading.Event()
+        self.status_thread = None
         self.configuration = configuration
         self.name = self.configuration.get("name")
         self.type = self.configuration.get("type")
         self.connection = self.configuration.get("connection")
-        self.modules = [x for x in self.configuration.get("modules", [])]
-        try:
-            self.modules = list(map(lambda x: {**x, 'configuration': load_configuration(x.get(
-                'configuration'))} if type(x.get('configuration')) == str else x, self.modules))
-        except Exception as e:
-            print("[CORE] Error while initializing, existing program")
-            print(str(e))
-            exit(1)
+        self.context = load_configuration(f"contexts/{configuration.get('context').get('type')}.json")
+        self.context["process"]["processId"] = None
+        self.parts = [x for x in self.configuration.get("parts", [])]
+        self.process_manager = None
+
+    def start_robot(self):
+        #1. Configure for session
         self.process_manager = ProcessManager()
         self.process_manager.start()
         self.operation_time = -1
-        self.stop_event = threading.Event()
 
+        #2. start the context
+        
+        processId = self.process_manager.make_process(
+            self.context["process"].get("name"),
+            self.context["process"].get("command"),
+            self.context["process"].get("path"),
+            self.context["process"].get("id"),
+            self.context["process"].get("initializer"),
+            True
+        )
+        context = self.process_manager.get_process(processId)
+        context.waitForReady()
+        self.context["process"]["processId"] = processId
+        print("Context has successfuly been created")
 
-    def __del__(self):
+        #3. start robot processes
+
+        for part in self.parts:
+            command = f"ros2 run {part.get('ros2Package')} {part.get('ros2Node')}"
+            processId = self.process_manager.make_process(
+                part.get("name"),
+                command,
+                "/home/hugoperier/projects/My-robotic",
+                part.get("id"),
+                part.get("initializer", None),
+                True
+            )
+            part["processId"] = processId
+
+    def stop_robot(self):
+        # Stop robot processes
+        for part in self.parts:
+            processId = part["processId"]
+            self.process_manager.stop_process(part["processId"], True)
+            part["processId"] = None
+
+        # Stop context
+        processId = self.context["process"]["processId"]
+        if (processId != None):
+            self.process_manager.stop_process(processId, True)
+            processId = None
+
         self.process_manager.stop()
-        self.stop_status_thread()
+
 
     def make_process(self, processId):
         processInfos = [x for x in self.configuration.get(
@@ -79,11 +120,31 @@ class Core:
             time.sleep(300)  # 300 seconds = 5 minutes
 
     def stop_status_thread(self):
-        # Set the stop event to signal the thread to stop
+        if (self.status_thread == None):
+            return
+
+        # Set the stop event to signal the thread to stfop
         self.stop_event.set()
 
         # Wait for the thread to finish
         self.status_thread.join()
+
+    def get_network_infos(self):
+        import socket
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        hostname = s.getsockname()[0]
+        s.close()
+        return hostname
+
+    def calculate_hash(self):
+        obj = {
+            "name": self.configuration["name"],
+            "context": self.configuration["context"],
+            "parts": self.configuration["parts"]
+        }
+        json_str = json.dumps(obj, separators=(',', ':'))
+        return hashlib.sha256(json_str.encode()).hexdigest()
 
     def send_robot_status(self):
         if (self.configuration.get("linked") != True):
@@ -100,6 +161,10 @@ class Core:
                 },
                 "location": {
                     "name": self.get_location()
+                },
+                "hash": self.calculate_hash(),
+                "network": {
+                    "hostname": self.get_network_infos()
                 }
             }
         requestPayload = {
@@ -109,7 +174,12 @@ class Core:
 
         try:
             response = requests.post(serverUri, json=requestPayload)
+            body = response.json()
+            print("Response include ")
+            print(body)
             print("Published status to neutron server")
+            if (body.get("configuration")):
+                self.pull_configuration(body["configuration"])
             if (response.status_code != 200):
                 print("Error while publishing robot status")
                 print(response.text)
@@ -117,6 +187,16 @@ class Core:
             print("[CORE] Error sending robot status")
             print(str(e))
         
+
+    def pull_configuration(self, configuration):
+        print("Pulling new configuration")
+        print(configuration)
+        print()
+        self.configuration["context"] = configuration["name"]
+        self.configuration["context"] = configuration["context"]
+        self.configuration["parts"] = configuration["parts"]
+        self.update_configuration()
+        self.context = load_configuration(f"contexts/{configuration.get('context').get('type')}.json")
 
     def update_configuration(self):
         try:
@@ -155,6 +235,6 @@ class Core:
 
     @property
     def status(self):
-        if (len(self.process_manager.processes)):
+        if (self.process_manager and len(self.process_manager.processes)):
             return "Operating"
         return "Online"

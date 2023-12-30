@@ -14,6 +14,9 @@ def run_server(configuration):
     server.core.enable_status_thread()
     server.serve_forever()
 
+    self.stop_status_thread()
+
+
 def custom_link_function():
     core = Core(configuration=configuration)
     key = input("Enter the key: ")
@@ -58,6 +61,10 @@ def custom_status_function(configuration):
         },
         "location": {
             "name": core.get_location()
+        },
+        "hash": core.calculate_hash(),
+        "network": {
+            "hostname": core.get_network_infos()
         }
     }
     print(systemInformations)
