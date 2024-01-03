@@ -1,4 +1,5 @@
 from modules.utils.HttpRequestHandler import HttpRequestHandler
+import json
 
 class CoreHttpHandler(HttpRequestHandler):
     def __init__(self, *args):
@@ -12,32 +13,14 @@ class CoreHttpHandler(HttpRequestHandler):
         HttpRequestHandler.__init__(self, get, post, *args)
 
     def robot_status(self):
-        status = 'Online'
-        processes = []
+        status_message = self.server.core.build_status_message()
 
-        if (self.server.core.process_manager != None and 
-        len(self.server.core.process_manager.processes) > 0):
-            status = 'Operating'
-            processes = list(self.server.core.get_processes_status())
-
-        systemInformations = {
-            "status": status,
-            "battery": self.server.core.get_battery(),
-            "system": {
-                "cpu": self.server.core.cpu_usage,
-                "memory": self.server.core.memory_usage,
-            },
-            "location": {
-                "name": self.server.core.get_location()
-            },
-            "processes": processes
-        }
-        self.send_json(systemInformations)
-
+        self.send_json(status_message)
 
     def start_robot(self):
         try:
-            self.server.core.start_robot()
+            processedId = self.body.get('processesId', [])
+            self.server.core.start_robot(processedId)
             self.success()
         except ValueError as e:
             print("ERROR " +str(e))

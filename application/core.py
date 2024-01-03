@@ -18,7 +18,7 @@ def run_server(configuration):
 
 
 def custom_link_function():
-    core = Core(configuration=configuration)
+    core = Core(configuration, True)
     key = input("Enter the key: ")
     if (len(key) != 36):
         print("Invalid key")
@@ -36,38 +36,27 @@ def custom_link_function():
         print(f"Error linking: {response.text}")
 
 def custom_status_function(configuration):
-    core = Core(configuration=configuration)
+    core = Core(configuration, True)
+    status_message = core.build_status_message()
 
-    serverUri = 'http://localhost:' + str(configuration.get('port')) + '/robot/status'
-    status = "Online"
-    try:
-        print(serverUri)
-        response = requests.get(serverUri)
-        if (response.status_code != 200):
-            status = "Unknown"
-            return
-        modules = response.json().get("modules")
-        if (modules != []):
-            status = "Operating"
-    except:
-        status = "Offline"
+    formatted_output = (
+        f"Status: {status_message['status']}\n"
+        f"Battery: {status_message['battery']}\n"
+        f"  Level: {status_message['battery']['level']}\n"
+        f"  Charging: {status_message['battery']['charging']}\n"
+        f"System: {status_message['system']}\n"
+        f"  CPU: {status_message['system']['cpu']}\n"
+        f"  Memory: {status_message['system']['memory']}\n"
+        f"Location: {status_message['location']}\n"
+        f"  Name: {status_message['location']['name']}\n"
+        f"Hash: {status_message['hash']}\n"
+        f"Network: {status_message['network']}\n"
+        f"  Hostname: {status_message['network']['hostname']}\n"
+        f"Processes: {status_message['processes']}\n"
+        f"Context: {status_message['context']}"
+    )
 
-    systemInformations = {
-        "status": status,
-        "battery": core.get_battery(),
-        "system": {
-            "cpu": core.cpu_usage,
-            "memory": core.memory_usage,
-        },
-        "location": {
-            "name": core.get_location()
-        },
-        "hash": core.calculate_hash(),
-        "network": {
-            "hostname": core.get_network_infos()
-        }
-    }
-    print(systemInformations)
+    print(formatted_output)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='The neutron agent is responsible for installing and managing the services for the robot.')    
