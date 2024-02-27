@@ -13,9 +13,9 @@ class OsoyooBaseController(Node):
         self.robot = OsoyooBase(configuration)
         self.stream_infos = self.create_publisher(String, 'topic', 10)
 
-        self.__keep_alive_timeout__ = 0.5
-        self.__keep_alive_time__ = 0
-        keep_alive_timer_period = 0.5  # seconds        
+        # self.__keep_alive_timeout__ = 0.5
+        # self.__keep_alive_time__ = 0
+        # keep_alive_timer_period = 0.5  # seconds        
 
         self.moveSubscription = self.create_subscription(
             Velocity,
@@ -27,20 +27,20 @@ class OsoyooBaseController(Node):
             'stop',
             self.stop,
             1)
-        self.keepAliveSubscription = self.create_subscription(
-            String,
-            'keep_alive',
-            self.keep_alive,
-            10)
+        # self.keepAliveSubscription = self.create_subscription(
+        #     String,
+        #     'keep_alive',
+        #     self.keep_alive,
+        #     10)
 
         self.postInfosPublisher = self.create_publisher(
             BaseInfos,
             'infos',
             10)
 
-        self.keep_alive_timer = self.create_timer(
-            keep_alive_timer_period, self.keep_alive_timer_callback
-            )
+        # self.keep_alive_timer = self.create_timer(
+        #     keep_alive_timer_period, self.keep_alive_timer_callback
+        #     )
         self.postInfosTimer = self.create_timer(
             1, self.post_infos_callback
             )
@@ -49,7 +49,7 @@ class OsoyooBaseController(Node):
         """Apply the transformation received to the robot to move it"""
         print("receive velocity" + str(msg.x) + str(msg.yaw), flush=True)
         self.robot.set_velocity(msg.x, msg.yaw)
-        self.__keep_alive_time__ = datetime.now()
+        # self.__keep_alive_time__ = datetime.now()
 
     def stop(self, msg):
         """Stop the robot"""
@@ -59,9 +59,9 @@ class OsoyooBaseController(Node):
         else:
             print("The robot is already stopped")
 
-    def keep_alive(self, msg):
-        """Keep the robot alive"""
-        self.__keep_alive_time__ = datetime.now()
+    # def keep_alive(self, msg):
+    #     """Keep the robot alive"""
+    #     self.__keep_alive_time__ = datetime.now()
     
     def post_infos_callback(self):
         """Publish paramter from the robot"""
@@ -72,14 +72,14 @@ class OsoyooBaseController(Node):
         msg.max_speed = self.robot.max_speed
         self.postInfosPublisher.publish(msg)
 
-    def keep_alive_timer_callback(self):
-        if (not self.robot.is_moving):
-            return
+    # def keep_alive_timer_callback(self):
+    #     if (not self.robot.is_moving):
+    #         return
 
-        now = datetime.now()
-        if (now - self.__keep_alive_time__).total_seconds() > self.__keep_alive_timeout__:
-            print("Timeout stopped the robot")
-            self.robot.stop()
+    #     now = datetime.now()
+    #     if (now - self.__keep_alive_time__).total_seconds() > self.__keep_alive_timeout__:
+    #         print("Timeout stopped the robot")
+    #         self.robot.stop()
 
 def main(args=None):
     rclpy.init(args=args)
