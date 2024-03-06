@@ -9,7 +9,7 @@ from myrobotics_protocol.msg import BaseInfos, Velocity
 class OsoyooBaseController(Node):
     def __init__(self):
         super().__init__('osoyoo_base')
-        configuration = load_configuration('/home/pi/.myrobotics/osoyoo_base.json')
+        configuration = load_configuration('/home/pi/.neutron/osoyoo_base.json')
         self.robot = OsoyooBase(configuration)
         self.stream_infos = self.create_publisher(String, 'topic', 10)
 
