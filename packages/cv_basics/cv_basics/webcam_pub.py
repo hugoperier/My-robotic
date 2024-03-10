@@ -22,7 +22,7 @@ class ImagePublisher(Node):
     def start_callback(self, msg):
         if not self.is_publishing:
             self.timer = self.create_timer(0.1, self.timer_callback)
-            self.cap = cv2.VideoCapture(0)
+            self.cap = cv2.VideoCapture('/dev/video10')
             self.is_publishing = True
             self.get_logger().info('Started publishing video frames')
 
