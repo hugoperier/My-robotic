@@ -14,6 +14,8 @@ class ImagePublisher(Node):
         self.br = CvBridge()
         self.is_publishing = False
 
+        print("Camera started!")
+
         self.create_subscription(String, 'start_command', self.start_callback, 10)
         self.create_subscription(String, 'stop_command', self.stop_callback, 10)
 
