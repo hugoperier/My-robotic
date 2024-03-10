@@ -4,10 +4,13 @@ from sensor_msgs.msg import Image, CompressedImage
 from std_msgs.msg import String
 import cv2
 from cv_bridge import CvBridge
+from modules.utils.func_utils import load_configuration
  
 class ImagePublisher(Node):
     def __init__(self):
         super().__init__('image_publisher')
+        configuration = load_configuration('/home/pi/.neutron/camera.json', False)
+        self.camera_source = configuration['camera']
         self.publisher_ = self.create_publisher(CompressedImage, 'video_frames', 1)
         self.timer = None
         self.cap = None
@@ -22,7 +25,7 @@ class ImagePublisher(Node):
     def start_callback(self, msg):
         if not self.is_publishing:
             self.timer = self.create_timer(0.1, self.timer_callback)
-            self.cap = cv2.VideoCapture('/dev/video10')
+            self.cap = cv2.VideoCapture(self.camera_source)
             self.is_publishing = True
             self.get_logger().info('Started publishing video frames')
 
